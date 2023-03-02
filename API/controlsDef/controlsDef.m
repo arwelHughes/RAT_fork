@@ -32,6 +32,7 @@ classdef controlsDef < matlab.mixin.CustomDisplay
         Nmcmc = 0
         propScale = 0.1     %Used if MCMC is used
         nsTolerance = 0.1     %Target stopping tolerance
+<<<<<<< HEAD
         
         %(4) Bayes MCMC
 %         method = 'dram';
@@ -41,6 +42,10 @@ classdef controlsDef < matlab.mixin.CustomDisplay
 %         repeats = 1; 
 
         %(5) DREAM
+=======
+
+        %(4) DREAM
+>>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
         nSamples = 50000;          % Total number of samples
         nChains = 10;               % Number of MCMC chains..
         lambda = 0.5;               % Jump probabilities
@@ -208,6 +213,7 @@ classdef controlsDef < matlab.mixin.CustomDisplay
              end
              obj.nsTolerance = val;
         end
+<<<<<<< HEAD
         
         % Bayes control methods. 
 %         function obj = set.method(obj,val)
@@ -245,6 +251,8 @@ classdef controlsDef < matlab.mixin.CustomDisplay
 %              end
 %              obj.repeats = val;
 %         end
+=======
+>>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
 
         % DREAM methods
         function obj = set.nSamples(obj,val)

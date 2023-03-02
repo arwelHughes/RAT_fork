@@ -1,5 +1,6 @@
 
-function [allLayersArr,allRoughsArr] = testDLL(params,nba,nbs,numberOfContrasts,libraryName,functionName)
+function [allLayersArr,allRoughsArr] = callCPP(params,nba,nbs,numberOfContrasts,libraryName,functionName)
+
     coder.cinclude('<functional>');
     coder.cinclude('<string>');
     coder.cinclude('<iostream>');
@@ -21,14 +22,11 @@ function [allLayersArr,allRoughsArr] = testDLL(params,nba,nbs,numberOfContrasts,
     p = coder.ceval('Library');
     %coder.ceval('std::mem_fn(&Library::loadInfo)',p,[clibraryName,'0'],[cfunctionName,'0']);
     
-    
-    % bulk in - 1xn
-    % bulk out - 1xn
-    % params - 1xn
     % call the class method in libManager.h
     coder.ceval('std::mem_fn(&Library::loadRunner)',p,coder.ref(params),coder.ref(nba),coder.ref(nbs)...
     ,numberOfContrasts,coder.wref(output),coder.wref(subRough),libraryName,functionName);
     
     allLayersArr = output;
     allRoughsArr = subRough;
+
 end

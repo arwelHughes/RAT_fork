@@ -40,11 +40,11 @@ switch lower(action)
             ratSendTextOutput(sprintf('\nRunning Differential Evolution\n\n'));
         end
         [outProblemDef,problem,results] = runDE_mex(problemDef,problemDef_cells,problemDef_limits,controls);
-    case 'bayes'
-        if ~strcmpi(controls.display,'off')
-            ratSendTextOutput(sprintf('\nRunning DRAM\n\n'));
-        end        
-        [outProblemDef,problem,results,bayesResults] = runDram(problemDef,problemDef_cells,problemDef_limits,controls,priors);
+%     case 'bayes'
+%         if ~strcmpi(controls.display,'off')
+%             ratSendTextOutput(sprintf('\nRunning DRAM\n\n'));
+%         end        
+%         [outProblemDef,problem,results,bayesResults] = runDram(problemDef,problemDef_cells,problemDef_limits,controls,priors);
     case 'ns'
         if ~strcmpi(controls.display,'off')
             ratSendTextOutput(sprintf('\nRunning Nested Sampler\n\n'));
@@ -54,6 +54,7 @@ switch lower(action)
         if ~strcmpi(controls.display,'off')
             ratSendTextOutput(sprintf('\nRunning DREAM\n\n'));
         end
+<<<<<<< HEAD
         
         % DEV and debug - this will be moved to controls...
 %         dreamC.nSamples = 100000;           % Total number of samples
@@ -63,6 +64,8 @@ switch lower(action)
 %         dreamC.boundHandling = 'fold';      % Boundary handling
 %         dreamC.prior = true;
 
+=======
+>>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
         [outProblemDef,problem,results,bayesResults] = runDREAM(problemDef,problemDef_cells,problemDef_limits,controls,priors);
 end
 

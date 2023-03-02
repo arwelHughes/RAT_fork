@@ -2,7 +2,7 @@ function [allLayers,allRoughs] =  loopCppCustlayWrapper_CustLaysingle(cBacks,cSh
 shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
 
 
-    coder.extrinsic('testDLL_mex');
+    % coder.extrinsic('testDLL_mex');
     allLayers = cell(numberOfContrasts,1);
     for i = 1:numberOfContrasts
         allLayers{i} = [1 ; 1];
@@ -24,8 +24,9 @@ shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
             %coder.extrinsic('testDLL_mex');
             output = zeros(8,3);
             sRough = 0.0;
+
             % This is the function that calls the C++ header function that loads the library,function and calls it with the supplied arguments
-            [output,sRough] = testDLL_mex(params,nba,nbs,i,cLibName,cfunctionName);
+            [output,sRough] = callDLL(params,nba,nbs,i,cLibName,cfunctionName);
             
             % THIS IS THE STUFF THAT NEEDS REFINING cause it will break for larger size x in (x,3)
             output = reshape(output,3,8)'; % convert to 3 x from top down and transpose 
@@ -38,14 +39,8 @@ shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
             allRoughs(i) = sRough;
 
         end
-        
-    end
-    
 
-
-    
-    
-   if coder.target('MATLAB')
+    elseif coder.target('MATLAB')
         
         for i = 1:numberOfContrasts
             % call mex function % params,nba,nbs,numberOfContrasts,output,subrough,libName,functionName);
@@ -64,29 +59,5 @@ shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
         end
    end
 
-
-
-    
 end 
  
-
-% if customFiles has multiple elements, then do this
-    % TALK WITH MARTYN ABOUT THIS
-% if length(customFiles) > 1
-%     % create a cell array of same size as customFiles
-%     customModels = cell(1,length(customFiles));
-%     for i=1:length(customModels)
-%         customModels(i) = customFiles{i}{2}; % load the custom function names into it
-%     end
-
-%     % load all the functions from DLL based on the customModels
-
-
-
-
-% else
-%     % if there is only 1 function 
-    
-% end
-
-% assumin only one custom function

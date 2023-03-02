@@ -15,11 +15,8 @@ chain = chain(1:iloc,1:DREAMPar.d+2,1:DREAMPar.N);
 % Now calculate the convergence diagnostics for individual chains using the CODA toolbox
 fid = fopen('DREAM_diagnostics.txt','w');
 % Now loop over each chain
-<<<<<<< HEAD
-for j = 1:DREAMPar.N,
-=======
+
 for j = 1:DREAMPar.N
->>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
     % First calculate diagnostics
     diagnostic{j} = coda(chain(floor(0.5*iloc):iloc,1:DREAMPar.d,j));
     % Now write to file DREAM.out

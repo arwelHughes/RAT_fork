@@ -26,7 +26,7 @@ shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
             sRough = 0.0;
 
             % This is the function that calls the C++ header function that loads the library,function and calls it with the supplied arguments
-            [output,sRough] = callDLL(params,nba,nbs,i,cLibName,cfunctionName);
+            [output,sRough] = testDLL_mex(params,nba,nbs,i,cLibName,cfunctionName);
             
             % THIS IS THE STUFF THAT NEEDS REFINING cause it will break for larger size x in (x,3)
             output = reshape(output,3,8)'; % convert to 3 x from top down and transpose 

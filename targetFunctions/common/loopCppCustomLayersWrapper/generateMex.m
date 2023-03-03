@@ -15,10 +15,10 @@ ARGS{1}{1} = coder.typeof(0,[1 Inf],[0 1]);
 ARGS{1}{2} = coder.typeof(0,[1 Inf],[0 1]);
 ARGS{1}{3} = coder.typeof(0,[1 Inf],[0 1]);
 ARGS{1}{4} = coder.typeof(int32(0));
-ARGS{1}{5} = coder.newtype('string');
-ARGS{1}{5}.Properties.Value = coder.typeof('X',[1 Inf],[0 1]);
-ARGS{1}{6} = coder.newtype('string');
-ARGS{1}{6}.Properties.Value = coder.typeof('X',[1 Inf],[0 1]);
+%ARGS{1}{5} = coder.newtype('string');
+ARGS{1}{5} = coder.typeof('X',[1 Inf],[0 1]);
+%ARGS{1}{6} = coder.newtype('string');
+ARGS{1}{6} = coder.typeof('X',[1 Inf],[0 1]);
 
 
 %% Invoke MATLAB Coder.

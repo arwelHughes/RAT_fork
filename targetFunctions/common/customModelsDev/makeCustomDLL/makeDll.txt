@@ -1,0 +1,3 @@
+
+g++ -arch x86_64 -c customBilayer.cpp -o customBilayer.o -std=c++11  
+g++ -arch x86_64 -shared customBilayer.o -o customBilayer.dylib  

@@ -390,11 +390,26 @@ switch inputControls.calcSldDuringFit
     otherwise
         controls.calcSld = 1;
 end
+<<<<<<< HEAD
+% controls.repeats = inputControls.repeats;
+% controls.nsimu = inputControls.nsimu;
+% controls.burnin = inputControls.burnin;
+=======
 
+>>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
 controls.resamPars = inputControls.resamPars;% [0.95 10];
 controls.updateFreq = inputControls.updateFreq;
 controls.updatePlotFreq = inputControls.updatePlotFreq;
 
+<<<<<<< HEAD
+%         method = 'dram';
+%         nsimu = 1000;
+%         adaptint = 100;
+%         burnin = 100;
+%         repeats = 1; 
+
+=======
+>>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
 controls.nSamples = inputControls.nSamples;
 controls.nChains = inputControls.nChains;   
 controls.lambda = inputControls.lambda;      

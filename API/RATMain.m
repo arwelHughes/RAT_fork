@@ -54,6 +54,18 @@ switch lower(action)
         if ~strcmpi(controls.display,'off')
             sendTextOutput(sprintf('\nRunning DREAM\n\n'));
         end
+<<<<<<< HEAD
+        
+        % DEV and debug - this will be moved to controls...
+%         dreamC.nSamples = 100000;           % Total number of samples
+%         dreamC.nChains = 10;                % Number of MCMC chains..
+%         dreamC.lambda = 0.5;                % Jump probabilities
+%         dreamC.p_unit_gamma = 0.2;
+%         dreamC.boundHandling = 'fold';      % Boundary handling
+%         dreamC.prior = true;
+
+=======
+>>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
         [outProblemDef,problem,results,bayesResults] = runDREAM(problemDef,problemDef_cells,problemDef_limits,controls,priors);
 end
 

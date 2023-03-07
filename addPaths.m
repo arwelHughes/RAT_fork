@@ -39,7 +39,7 @@ paths = {
 
     fullfile(root,'targetFunctions','common');
     fullfile(root,'targetFunctions','common','backSort');
-    fullfile(root,'targetFunctions','common','callMatlabFunction');
+    % fullfile(root,'targetFunctions','common','callMatlabFunction');
     fullfile(root,'targetFunctions','common','callReflectivity');
     fullfile(root,'targetFunctions','common','costFunctions','chiSquared');
     fullfile(root,'targetFunctions','common','groupLayers');
@@ -51,6 +51,7 @@ paths = {
     fullfile(root,'targetFunctions','common','resampleLayers');
     fullfile(root,'targetFunctions','common','resolutionFunctions','simpleGaussian');   
     fullfile(root,'targetFunctions','common','shiftData');
+    fullfile(root,'targetFunctions','common','customModelsClass');
     
     fullfile(root,'targetFunctions','reflectivityCalculation');
     fullfile(root,'targetFunctions','standardTF');

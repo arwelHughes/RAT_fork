@@ -31,20 +31,9 @@ classdef controlsClass < matlab.mixin.CustomDisplay
         Nmcmc = 0
         propScale = 0.1     %Used if MCMC is used
         nsTolerance = 0.1     %Target stopping tolerance
-<<<<<<< HEAD
-        
-        %(4) Bayes MCMC
-%         method = 'dram';
-%         nsimu = 1000;
-%         adaptint = 100;
-%         burnin = 100;
-%         repeats = 1; 
 
-        %(5) DREAM
-=======
 
         %(4) DREAM
->>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
         nSamples = 50000;          % Total number of samples
         nChains = 10;               % Number of MCMC chains..
         lambda = 0.5;               % Jump probabilities
@@ -212,46 +201,6 @@ classdef controlsClass < matlab.mixin.CustomDisplay
              end
              obj.nsTolerance = val;
         end
-<<<<<<< HEAD
-        
-        % Bayes control methods. 
-%         function obj = set.method(obj,val)
-%              if ~strcmpi(val,{'DRAM','Delayed Rejection','Adaptive Metropolis','Metropolis Hastings'})
-%                  error('Display must be set to ''DRAM'',''Delayed Rejection'',''Adaptive Metropolis'' or ''Metropolis Hastings'' ');
-%              end
-%              obj.method = val;
-%         end
-%              
-%         function obj = set.nsimu(obj,val)
-%              if (~isnumeric(val) || val < 0 )
-%                  error('nsumu must be a positive number');
-%              end
-%              obj.nsimu = val;
-%         end
-%         
-%         function obj = set.adaptint(obj,val)
-%              if (~isnumeric(val) || val < 0 )
-%                  error('adaptint must be a positive number');
-%              end
-%              obj.adaptint = val;
-%         end
-%             
-%         function obj = set.burnin(obj,val)
-%              if (~isnumeric(val) || val < 0 )
-%                  error('burnin must be a positive number');
-%              end
-%              obj.burnin = val;
-%         end
-%         
-%          
-%         function obj = set.repeats(obj,val)
-%              if (~isnumeric(val) || val < 1 )
-%                  error('burnin must be a positive number > 1');
-%              end
-%              obj.repeats = val;
-%         end
-=======
->>>>>>> 5d29e0e3f4fddd485e222968fad3a65640dd1a90
 
         % DREAM methods
         function obj = set.nSamples(obj,val)

@@ -16,53 +16,89 @@ classdef customModelClass < handle
 
     methods
 
+        function [allLayers,allRoughs] = processCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                    shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
+
+        % Top-level function for processing custom layers for all the
+        % contrasts. Because we want to allow users to 'mix and match'
+        % custom models from Cpp, Matlab or Python, we're not attempting
+        % any parallelisation across custom models any more. We simply loop
+        % through the contrasts and call whichever routines are applicable
+
+        % Do some pre-definitions to keep the compiler happy...
+        tempAllLayers = cell(numberOfContrasts,1);
+        allLayers = cell(numberOfContrasts,1);
+        allRoughs = zeros(numberOfContrasts,1);
+
+        for i = 1:numberOfContrasts
+            allLayers{i} = [1 , 1];    % Type def as double (size not important)
+            tempAllLayers{i} = [0 0 0 0 0];
+        end
+        coder.varsize('tempAllLayers{:}',[10000 5],[1 1]);
+
+        for i = 1:numberOfContrasts
+            % Choose which custom file is associated with this contrast
+            thisCustomModel = customFiles{cCustFiles(i)};
+
+            % Check what language it is....
+            thisLanguage = thisCustomModel{2};
+
+            switch thisLanguage
+                case 'matlab'
+                    [tempAllLayers{i},allRoughs(i)] = matlabCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                        shifts,sf,nba,nbs,res,thisCustomModel,params,para,i);
+                case 'cpp'
+                    [tempAllLayers{i},allRoughs(i)] = cppCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                        shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para,i);
+                case 'python'
+                    [tempAllLayers{i},allRoughs(i)] = pythonCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                        shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para,i);
+            end 
+        end
+        
+        allLayers = tempAllLayers;
+
+        end
+
+
         % ******* Matlab custom models methods*******
 
-        function [allLayers, allRoughs] = matlabCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para)
+        function [allLayers, rough] = matlabCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                shifts,sf,nba,nbs,res,thisCustomModel,params,para,i)
 
             % Method to process Matlab custom layers user scripts.
             % This version excecutes the custom model via extrinsic 'feval'
             % into base Matlab workspace. This method will be removed when
             % we make the Python API version and replaced with an external
             % engine call..
-            tempAllLayers = cell(numberOfContrasts,1);
-            allLayers = cell(numberOfContrasts,1);
-            allRoughs = zeros(numberOfContrasts,1);
+%             tempAllLayers = cell(numberOfContrasts,1);
+%             allLayers = cell(numberOfContrasts,1);
+%             allRoughs = zeros(numberOfContrasts,1);
 
-            for i = 1:numberOfContrasts
-                allLayers{i} = [1 , 1];    % Type def as double (size not important)
-                tempAllLayers{i} = [0 0 0 0 0];
-            end
-            coder.varsize('tempAllLayers{:}',[10000 5],[1 1]);
+            %for i = 1:numberOfContrasts
+                allLayers = [1 , 1];    % Type def as double (size not important)
+                tempAllLayers = [0 0 0 0 0];
+            %end
+            coder.varsize('tempAllLayers',[10000 5],[1 1]);
+            coder.varsize('allLayers',[10000 5],[1 1]);
 
-            % Call the Matlab custom model. Based on the input 'para', then
-            % we either run over all contrasts single cored (para ==
-            % false), or we ask the paralell computing toolbox to paralell
-            % over the contrasts. By using 'feval', we force these
-            % functions to run in Matlab as extrinsic calls, rather than
+            % Call the Matlab custom model. By using 'feval', we force the
+            % function to run in Matlab as extrinsic calls, rather than
             % compiling them.
-            if para
-                [tempAllLayers, tempAllRoughs] = feval('matlabCustomLayersSingle',cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                    shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params);
-            else
-                [tempAllLayers, tempAllRoughs] = feval('matlabCustomLayersParallel',cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                    shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params);
-            end
+            [tempAllLayers, tempRough] = feval('matlabCustomLayersSingle',cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                                    shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params);
 
             % All the following is intended to be casting from mxArray's to doubles.
             % I'm not sure if all of this is necessary, but it compiles...
-            for i = 1:numberOfContrasts
-                tempOut = tempAllLayers{i};
-                n = [0 0];
-                n = size(tempOut);
-                newOut = zeros(n);
-                newOut = tempOut;
-                allLayers{i} = newOut;
-            end
+            % for i = 1:numberOfContrasts
+            tempOut = tempAllLayers;
+            n = [0 0];
+            n = size(tempOut);
+            newOut = zeros(n);
+            newOut = tempOut;
+            allLayers = newOut;
 
-            %allLayers = tempAllLayers;
-            allRoughs = tempAllRoughs;
+            rough = tempRough;
         end
 
         function [allSLDs, allRoughs] = matlabCustomXY(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
@@ -182,16 +218,10 @@ classdef customModelClass < handle
             allRoughsArr = subRough;
         end
 
-
-
         function [allLayersArr,allRoughsArr] = callExternalPython(params,nba,nbs,numberOfContrasts,libraryName,functionName)
-            
-
-
-
-
+            % TODO
 
         end
-        
+
     end
 end

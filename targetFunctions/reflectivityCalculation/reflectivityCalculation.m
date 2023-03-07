@@ -82,7 +82,6 @@ if isempty(customClass)
     customClass = customModelClass();
 end
 
-
 %Decide which target function we are calling ans call the relevant routines
 whichTF = problemDef.TF;
 switch whichTF

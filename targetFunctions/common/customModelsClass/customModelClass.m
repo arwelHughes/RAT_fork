@@ -10,13 +10,12 @@ classdef customModelClass < handle
     % https://uk.mathworks.com/help/matlab/calling-matlab-engine-from-c-programs-1.html
 
     properties
-        matlabEngine
-        pythonSession
+
     end
 
-    methods
+    methods 
 
-        function [allLayers,allRoughs] = processCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+        function [allLayers,allRoughs] = processCustomLayers(obj,cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
                                     shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
 
         % Top-level function for processing custom layers for all the
@@ -45,14 +44,14 @@ classdef customModelClass < handle
 
             switch thisLanguage
                 case 'matlab'
-                    [tempAllLayers{i},allRoughs(i)] = matlabCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                                        shifts,sf,nba,nbs,res,thisCustomModel,params,para,i);
+                    [tempAllLayers{i},allRoughs(i)] = obj.matlabCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                        shifts,sf,nba,nbs,res,thisCustomModel,params,i,numberOfContrasts);
                 case 'cpp'
-                    [tempAllLayers{i},allRoughs(i)] = cppCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                                        shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para,i);
+                    [tempAllLayers(i),allRoughs(i)] = obj.cppCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                        shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para,i,numberOfContrasts);
                 case 'python'
-                    [tempAllLayers{i},allRoughs(i)] = pythonCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                                        shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para,i);
+                    [tempAllLayers(i),allRoughs(i)] = obj.pythonCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                        shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params,para,i,numberOfContrasts);
             end 
         end
         
@@ -61,10 +60,19 @@ classdef customModelClass < handle
         end
 
 
+        function [allSLDs,allRoughs] = processCustomXY(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                                    shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params)
+
+            % TODO.....
+
+
+        end
+
+
         % ******* Matlab custom models methods*******
 
-        function [allLayers, rough] = matlabCustomLayers(cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                shifts,sf,nba,nbs,res,thisCustomModel,params,para,i)
+        function [allLayers, rough] = matlabCustomLayers(obj,cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
+                shifts,sf,nba,nbs,res,thisCustomModel,params,whichContrast,numberOfContrasts)
 
             % Method to process Matlab custom layers user scripts.
             % This version excecutes the custom model via extrinsic 'feval'
@@ -86,7 +94,7 @@ classdef customModelClass < handle
             % function to run in Matlab as extrinsic calls, rather than
             % compiling them.
             [tempAllLayers, tempRough] = feval('matlabCustomLayersSingle',cBacks,cShifts,cScales,cNbas,cNbss,cRes,backs,...
-                                                    shifts,sf,nba,nbs,res,cCustFiles,numberOfContrasts,customFiles,params);
+                                                    shifts,sf,nba,nbs,res,thisCustomModel,params,whichContrast,numberOfContrasts);
 
             % All the following is intended to be casting from mxArray's to doubles.
             % I'm not sure if all of this is necessary, but it compiles...
@@ -187,6 +195,24 @@ classdef customModelClass < handle
     end
 
     % ********** End Cpp Methods ***************
+
+
+    % ************* Python custom model methods ************
+
+
+
+
+
+
+
+
+
+
+
+
+    % ******************************************
+
+
 
     methods (Access=private)
 

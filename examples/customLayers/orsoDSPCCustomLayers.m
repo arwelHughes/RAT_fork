@@ -1,4 +1,4 @@
- %function problem = orsoDSPCCustomLayers()
+%function problem = orsoDSPCCustomLayers()
 
 %% Custom Layers Example for Supported DSPC layer.
 % 
@@ -98,7 +98,7 @@ problem.addBackground('Background SMW','constant','Backs par SMW');
 problem.addBackground('Background H2O','constant','Backs par H2O');
 
 % And edit the other one....
-problem.setBackgroundValue(1,'name','Background D2O');
+problem.setBackgroundName(1,'Background D2O');
 problem.setBackgroundValue(1,'value 1','Backs par D2O');
 
 % Finally modify some of the other parameters to be more suitable values

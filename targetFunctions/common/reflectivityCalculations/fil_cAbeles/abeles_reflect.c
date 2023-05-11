@@ -11,7 +11,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <complex.h>
-#include <cblas.h>
 
 #define PI	3.14159265358979323846	/*  pi    */
 
@@ -46,7 +45,7 @@ double complex findkn(double complex k0, double sld) {
 	A3(2 , 1) = A1(2 , 1)*A2(1 , 1) + A1(2 , 2)*A2(2 , 1)
 	A3(2 , 2) = A1(2 , 1)*A2(1 , 2) + A1(2 , 2)*A2(2 , 2)
 	RETURN
-	END*/
+	END
 
 double complex mmult(double a1[4], double a2[4], double* a3[4]) {
 
@@ -55,9 +54,9 @@ double complex mmult(double a1[4], double a2[4], double* a3[4]) {
     a3[2] = a1[2] * a2[0] + a1[3] * a2[2];
 	a3[3] = a1[2] * a2[1] + a1[3] * a2[3];
 
-}
+}*/
 
-double abeles_reflect(double Q, int N, double layers_thick[N], double layers_rho[N], double layers_sig[N], double* R) {
+double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho, double* layers_sig, double* R_out) {
     /* N = number of layers in total (including bulk in and bulk out), for example
      * for a system of air|tails|heads|water  N=4.
      */       
@@ -69,12 +68,14 @@ double abeles_reflect(double Q, int N, double layers_thick[N], double layers_rho
     double complex k1, kn, knp1, nom_n, denom_n;
     double complex *kn_ptr;        
     
-    complex alpha = 1.0 + 0.0 * I;
-    complex beta = 0.0 + 0.0 * I;
+    double complex alpha = 1.0 + 0.0 * I;
+    double complex beta = 0.0 + 0.0 * I;
     
     double complex M_n[4];
     double complex M_tot[4]; 
     double complex M_res[4];
+
+    double R;
     
     /* Find k0 from Q:*/
     double complex k0;
@@ -105,7 +106,6 @@ double abeles_reflect(double Q, int N, double layers_thick[N], double layers_rho
             /* Point to the k1 via kn_ptr: */            
             kn_ptr = &k1;            
             
-
         } else { /* n=1, n=2 ...*/                           
             
             /* Fetch sld_n+1 (ex. sld_2 for n=1): */            
@@ -137,8 +137,14 @@ double abeles_reflect(double Q, int N, double layers_thick[N], double layers_rho
             M_res[2] = 0.0;
             M_res[3] = 0.0;
 
-            /*Multiply M_tot by M_n:*/
-            mmult(M_tot, M_n, *M_res);
+            /* Multiply the matricies*/
+            M_res[0] = M_tot[0] * M_n[0] + M_tot[1] * M_n[2];
+            M_res[1] = M_tot[0] * M_n[1] + M_tot[1] * M_n[3];
+            M_res[2] = M_tot[2] * M_n[0] + M_tot[3] * M_n[2];
+	        M_res[3] = M_tot[2] * M_n[1] + M_tot[3] * M_n[3];
+
+            /*Multiply M_tot by M_n:
+            mmult(M_tot, M_n, *M_res);*/
             
             /*Multiply M_tot by M_n:
             cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
@@ -155,77 +161,15 @@ double abeles_reflect(double Q, int N, double layers_thick[N], double layers_rho
         }
     };
     
-    double R;
     R = cabs(M_tot[2]/M_tot[0]);
     R = pow(R, 2.0);
     
+    R_out[0] = R;
+
     return 0;
-
 }
 
 
-double noisy_abelesRefl( double Q, int N, double layerSetup[N][3]){
-    
-    float M = 4;
-    double bg = 2.0e-6;  /*Background noise*/
-    float dq_q = 0.03;   /*Instrument precision*/
-    
-    double nom_sum = 0.0; 
-    double denom_sum = 0.0; 
-    double wa, clnR, R;
-    double nQ;
-    
-    int a;
-    float am;        
-
-    for (a = -M; a <= M; a += 1.0){
-        
-        clnR = 0.0;
-        nQ = 0.0;
-        am = a/M;
-        nQ = Q * (1 + (am * dq_q) );
-        wa = pow( exp(1.0), (-2*(pow(am, 2.0))) ); /* e^{-2(a/M)^2} */
-        
-        clnR = abeles_reflect(nQ, N, layerSetup);            
-               
-        nom_sum += (wa * clnR);
-        denom_sum += wa;  
-    } 
-    
-    R = (nom_sum / denom_sum) + bg;
-    
-    return R;
-}
-
-
-
-/* int main() {
-
-    float Q = 0.0216;   
-    double R, Rnoisy;
-    int n = 4;         // total number of layers including bulk-in and bulk-out
-        
-    /* layer parameters: [d, sld, sigma]
-    double layerSetup[4][3] = {
-        {15000.0, 0.0, 0.0},
-        {16.0, 6.0e-6, 5.0},
-        {9.0, 1.4e-6, 5.0},
-        {15000.0, 6.35e-6, 4.8444}
-    };
-    
-    
-    R = abeles_reflect(Q, n, layerSetup);
-    printf("First R = %.12f\n", R);
-           
-        
-    Rnoisy = noisy_abelesRefl(Q, n, layerSetup);    
-    printf("\nR noisy = %.15f\n", Rnoisy);
-    
-    
-    printf("\n-------------------\n");
-    return (0);
-} 
-*/
 
 
 

@@ -9,16 +9,21 @@
 
 
 
-double inputTest(int N, double in[N][2], double* out) {
+double inputTest(int N, double* in, double* out) {
 
     /* test to make sure the inputs from 
        Matlab come in and go out in the correct
        way */
+    double R;
 
-    out[0] = in[0][0] * 2.0;
-    out[1] = in[0][1] * 2.0;
-    out[2] = in[1][0] * 2.0;
-    out[3] = in[1][1] * 2.0;
+    /*out[0] = in[0] * 2.0;
+    out[1] = in[1] * 2.0;
+    out[2] = in[2] * 2.0;
+    out[3] = in[3] * 2.0;*/
+
+    R = 2 + 2;
+
+    out[0] = R;
 
     return 0;
 

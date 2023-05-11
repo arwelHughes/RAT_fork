@@ -48,16 +48,16 @@ double complex findkn(double complex k0, double sld) {
 	RETURN
 	END*/
 
-double complex mmult(double a1[2][2], double a2[2][2], double* a3[2][2]) {
+double complex mmult(double a1[4], double a2[4], double* a3[4]) {
 
-    a3[1][1] = a1[1][1] * a2[1][1] + a1[1][2] * a2[2][1];
-    a3[1][2] = a1[1][1] * a2[1][2] + a1[1][2] * a2[2][2];
-    a3[2][1] = a1[2][1] * a2[1][1] + a1[2][2] * a2[2][1];
-	a3[2][2] = a1[2][1] * a2[1][2] + a1[2][2] * a2[2][2];
+    a3[0] = a1[0] * a2[0] + a1[1] * a2[2];
+    a3[1] = a1[0] * a2[1] + a1[1] * a2[3];
+    a3[2] = a1[2] * a2[0] + a1[3] * a2[2];
+	a3[3] = a1[2] * a2[1] + a1[3] * a2[3];
 
 }
 
-double abeles_reflect(double Q, int N, double layerSetup[N][3], double* R) {
+double abeles_reflect(double Q, int N, double layers_thick[N], double layers_rho[N], double layers_sig[N], double* R) {
     /* N = number of layers in total (including bulk in and bulk out), for example
      * for a system of air|tails|heads|water  N=4.
      */       
@@ -86,13 +86,13 @@ double abeles_reflect(double Q, int N, double layerSetup[N][3], double* R) {
         if (n == 0) { /* n=0 */
 
             /* Find k1 */        
-            sld_1 = layerSetup[n + 1][1];
+            sld_1 = layers_rho[n + 1];
             k1 = findkn(k0, sld_1);
 
             /* Find r01 */
             nom1 = k0 - k1;
             denom1 = k0 + k1;
-            sigmasqrd = pow(layerSetup[n + 1][2], 2);
+            sigmasqrd = pow(layers_sig[n + 1], 2);
             err1 = exp(-2 * k1 * k0 * sigmasqrd);
             r01 = (nom1 / denom1) * err1;
 
@@ -109,7 +109,7 @@ double abeles_reflect(double Q, int N, double layerSetup[N][3], double* R) {
         } else { /* n=1, n=2 ...*/                           
             
             /* Fetch sld_n+1 (ex. sld_2 for n=1): */            
-            sld_np1 = layerSetup[n + 1][1];
+            sld_np1 = layers_rho[n + 1];
             
             /* Find kn and k_n+1 (ex. k1 and k2 for n=1): */
             kn = *kn_ptr;
@@ -118,12 +118,12 @@ double abeles_reflect(double Q, int N, double layerSetup[N][3], double* R) {
             /* Find r_n,n+1: */
             nom_n = kn - knp1;
             denom_n = kn + knp1;
-            sigmasqrd = pow(layerSetup[n + 1][2], 2);
+            sigmasqrd = pow(layers_sig[n + 1], 2);
             err_n = exp(-2 * kn * knp1 * sigmasqrd);
             r_n_np1 = (nom_n / denom_n) * err_n;
 
             /*Find the Phase Factor = (k_n * d_n)  */
-            phaseFctr = kn * layerSetup[n][0];               
+            phaseFctr = kn * layers_thick[n];
             
             /* Create the M_n matrix: */        
             M_n[0] = cpow(exp(1.0), phaseFctr*I);
@@ -137,6 +137,7 @@ double abeles_reflect(double Q, int N, double layerSetup[N][3], double* R) {
             M_res[2] = 0.0;
             M_res[3] = 0.0;
 
+            /*Multiply M_tot by M_n:*/
             mmult(M_tot, M_n, *M_res);
             
             /*Multiply M_tot by M_n:

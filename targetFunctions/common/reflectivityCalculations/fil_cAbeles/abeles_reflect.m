@@ -11,9 +11,13 @@ else
 
     R = zeros(length(q));
     R_out = 0;
+    thick = layers(:,1);
+    sld = layers(:,2);
+    rough = layers(:,3);
+
     for i = 1:length(q)
         this_q = q(i);
-        coder.ceval('abeles_reflect',this_q,N,layers,coder.wref(R_out));
+        coder.ceval('abeles_reflect',this_q,N,thick,sld,rough,coder.wref(R_out));
         R(i) = R_out;
     end
 

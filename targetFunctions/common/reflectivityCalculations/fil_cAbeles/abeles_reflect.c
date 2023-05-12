@@ -37,32 +37,13 @@ double complex findkn(double complex k0, double sld) {
 }
 
 
-	/*SUBROUTINE MMULT(A1 , A2 , A3)
-	! SUBROUTINE FOR MATRIX MUTIPLICATION
-	DOUBLE COMPLEX A1(2 , 2) , A2(2 , 2) , A3(2 , 2)
-	A3(1 , 1) = A1(1 , 1)*A2(1 , 1) + A1(1 , 2)*A2(2 , 1)
-	A3(1 , 2) = A1(1 , 1)*A2(1 , 2) + A1(1 , 2)*A2(2 , 2)
-	A3(2 , 1) = A1(2 , 1)*A2(1 , 1) + A1(2 , 2)*A2(2 , 1)
-	A3(2 , 2) = A1(2 , 1)*A2(1 , 2) + A1(2 , 2)*A2(2 , 2)
-	RETURN
-	END
-
-double complex mmult(double a1[4], double a2[4], double* a3[4]) {
-
-    a3[0] = a1[0] * a2[0] + a1[1] * a2[2];
-    a3[1] = a1[0] * a2[1] + a1[1] * a2[3];
-    a3[2] = a1[2] * a2[0] + a1[3] * a2[2];
-	a3[3] = a1[2] * a2[1] + a1[3] * a2[3];
-
-}*/
-
 double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho, double* layers_sig, double* R_out) {
     /* N = number of layers in total (including bulk in and bulk out), for example
      * for a system of air|tails|heads|water  N=4.
      */       
 
     double nom1, denom1, sigmasqrd, sld_1, sld_n, sld_np1;
-    double bulk_in_SLD = 0.0;
+    double bulk_in_SLD;
     
     double complex r01, err1, err_n, phaseFctr, r_n_np1;
     double complex k1, kn, knp1, nom_n, denom_n;
@@ -78,6 +59,7 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
     double R;
     
     /* Find k0 from Q:*/
+    bulk_in_SLD = layers_rho[0];
     double complex k0;
     k0 = findk0(Q, bulk_in_SLD) + 0.0 * I;
 
@@ -87,7 +69,7 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
         if (n == 0) { /* n=0 */
 
             /* Find k1 */        
-            sld_1 = layers_rho[n + 1];
+            sld_1 = layers_rho[n + 1] - bulk_in_SLD;
             k1 = findkn(k0, sld_1);
 
             /* Find r01 */
@@ -109,7 +91,7 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
         } else { /* n=1, n=2 ...*/                           
             
             /* Fetch sld_n+1 (ex. sld_2 for n=1): */            
-            sld_np1 = layers_rho[n + 1];
+            sld_np1 = layers_rho[n + 1] - bulk_in_SLD;
             
             /* Find kn and k_n+1 (ex. k1 and k2 for n=1): */
             kn = *kn_ptr;
@@ -141,14 +123,7 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
             M_res[0] = M_tot[0] * M_n[0] + M_tot[1] * M_n[2];
             M_res[1] = M_tot[0] * M_n[1] + M_tot[1] * M_n[3];
             M_res[2] = M_tot[2] * M_n[0] + M_tot[3] * M_n[2];
-	        M_res[3] = M_tot[2] * M_n[1] + M_tot[3] * M_n[3];
-
-            /*Multiply M_tot by M_n:
-            mmult(M_tot, M_n, *M_res);*/
-            
-            /*Multiply M_tot by M_n:
-            cblas_zgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
-               2, 2, 2, &alpha, M_tot, 2, M_n, 2, &beta, M_res, 2);*/     
+	        M_res[3] = M_tot[2] * M_n[1] + M_tot[3] * M_n[3];   
             
             /*Reassign the values back to M_tot:*/
             M_tot[0] = M_res[0];

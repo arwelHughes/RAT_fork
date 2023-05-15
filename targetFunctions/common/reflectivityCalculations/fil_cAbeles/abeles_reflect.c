@@ -14,7 +14,7 @@
 
 #define PI	3.14159265358979323846	/*  pi    */
 
-double complex findk0(float q, double bulk_in_SLD) {
+double complex findk0(float q, double complex bulk_in_SLD) {
 
     double complex k0;
     double q_sqrd = pow(q, 2);
@@ -25,7 +25,7 @@ double complex findk0(float q, double bulk_in_SLD) {
 }
 
 
-double complex findkn(double complex k0, double sld) {
+double complex findkn(double complex k0, double complex sld) {
 
     double complex k;
     double complex subtr;
@@ -43,7 +43,9 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
      */       
 
     double nom1, denom1, sigmasqrd, sld_1, sld_n, sld_np1;
-    double bulk_in_SLD;
+    double complex bulk_in_SLD;
+
+    double bulk_in_re, sld_1_re, sld_np1_re;
     
     double complex r01, err1, err_n, phaseFctr, r_n_np1;
     double complex k1, kn, knp1, nom_n, denom_n;
@@ -57,9 +59,12 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
     double complex M_res[4];
 
     double R;
+
     
     /* Find k0 from Q:*/
-    bulk_in_SLD = layers_rho[0];
+    bulk_in_re = layers_rho[0];
+    bulk_in_SLD = bulk_in_re + 0.0 * I;
+
     double complex k0;
     k0 = findk0(Q, bulk_in_SLD) + 0.0 * I;
 
@@ -68,8 +73,12 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
 
         if (n == 0) { /* n=0 */
 
-            /* Find k1 */        
-            sld_1 = layers_rho[n + 1] - bulk_in_SLD;
+            /* Find k1 */ 
+            sld_1_re = layers_rho[n + 1];
+            sld_1 = sld_1_re + 0.0 * I;
+            sld_1 = sld_1 - bulk_in_SLD;
+            /*sld_1 = layers_rho[n + 1] - bulk_in_SLD;*/
+
             k1 = findkn(k0, sld_1);
 
             /* Find r01 */
@@ -90,8 +99,11 @@ double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho,
             
         } else { /* n=1, n=2 ...*/                           
             
-            /* Fetch sld_n+1 (ex. sld_2 for n=1): */            
-            sld_np1 = layers_rho[n + 1] - bulk_in_SLD;
+            /* Fetch sld_n+1 (ex. sld_2 for n=1): */ 
+            sld_np1_re = layers_rho[n + 1];
+            sld_np1 = sld_np1_re + 0.0 * I;
+            sld_np1 = sld_np1 - bulk_in_SLD;
+            /*sld_np1 = layers_rho[n + 1] - bulk_in_SLD;*/
             
             /* Find kn and k_n+1 (ex. k1 and k2 for n=1): */
             kn = *kn_ptr;

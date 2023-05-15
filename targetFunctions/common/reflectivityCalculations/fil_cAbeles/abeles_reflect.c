@@ -37,7 +37,7 @@ double complex findkn(double complex k0, double complex sld) {
 }
 
 
-double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho, double* layers_sig, double* R_out) {
+double abeles_reflect(double Q, int N, double* layers_thick, double* layers_rho, double* layers_rhoim, double* layers_sig, double* R_out) {
     /* N = number of layers in total (including bulk in and bulk out), for example
      * for a system of air|tails|heads|water  N=4.
      */       

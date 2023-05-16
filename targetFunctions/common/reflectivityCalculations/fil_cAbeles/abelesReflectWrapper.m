@@ -14,12 +14,16 @@ else
     thick = layers(:,1);
     sld = layers(:,2);
     
-    sld_im = zeros(N,1);
+    % sld_im = zeros(N,1);
+    sld_im = layers(:,3);
 
-    rough = layers(:,3);
+    rough = layers(:,4);
 
     for i = 1:length(q)
         this_q = q(i);
+        
+
+
         coder.ceval('abeles_reflect',this_q,int32(N),coder.ref(thick),coder.ref(sld),coder.ref(sld_im),coder.ref(rough),coder.wref(R_out));
         R(i) = R_out(1);
     end

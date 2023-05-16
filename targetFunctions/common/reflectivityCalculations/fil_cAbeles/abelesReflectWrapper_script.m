@@ -14,8 +14,8 @@ cfg.EnableJITSilentBailOut = true;
 %% Define argument types for entry-point 'abelesReflectWrapper'.
 ARGS = cell(1,1);
 ARGS{1} = cell(2,1);
-ARGS{1}{1} = coder.typeof(0,[1000   1],[1 0]);
-ARGS{1}{2} = coder.typeof(0,[1000   3],[1 0]);
+ARGS{1}{1} = coder.typeof(0,[10000   1],[1 0]);
+ARGS{1}{2} = coder.typeof(0,[1000   4],[1 0]);
 
 %% Invoke MATLAB Coder.
 codegen -config cfg abelesReflectWrapper -args ARGS{1}

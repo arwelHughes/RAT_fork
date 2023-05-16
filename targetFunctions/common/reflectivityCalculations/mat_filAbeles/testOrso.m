@@ -20,21 +20,25 @@ data7 = dlmread('test7.dat');
 % bulkOut = 6.35e-6;
 % 
 % sub_rough = 3;
-q = data7(:,1);
+%q = data7(:,1);
+
+q = linspace(0.01,0.5,1000);
 
 %ref = callAbeles_mex(q', layers, bulkIn, bulkOut, sub_rough);
 layers_thick = layers(:,1);
 layers_sig = layers(:,4);
-layers(:,3) = layers(:,3) + eps;
+layers(:,3) = layers(:,3);% + eps;
 layers_rho = complex(layers(:,2),layers(:,3));
 
 N = length(layers_thick);
 
-ref = abeles_reflect_matlab(q,N,layers_thick,layers_rho,layers_sig);
+%ref = abeles_reflect_matlab(q,N,layers_thick,layers_rho,layers_sig);
+ref = gptWrapper(q,N,layers_thick,layers_rho,layers_sig);
+
 
 %out = abelesSingle(q,allSld,bulkIn,bulkOut,1,3,1,length(q));
 
 figure(2); clf
-semilogy(data7(:,1),data7(:,2));
+%semilogy(data7(:,1),data7(:,2));
 hold on
 semilogy(q,ref);

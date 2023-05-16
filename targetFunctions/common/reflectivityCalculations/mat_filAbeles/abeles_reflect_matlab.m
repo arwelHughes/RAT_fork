@@ -2,22 +2,23 @@ function ref = abeles_reflect_matlab(q,N,layers_thick,layers_rho,layers_sig)
 
 % New Matlab version of reflectivity
 % with complex rho...
-
+tiny = 1e-30;
+ci = complex(0,1);
 
 ref = zeros(length(q),1);
 
 for points = 1:length(q)
 
     Q = q(points);
-    bulk_in_SLD = layers_rho(1);
+    bulk_in_SLD = complex(layers_rho(1),tiny);
     k0 = findk0(Q, bulk_in_SLD);
 
     for n = 1:N-1
 
         if n == 1
-            sld_1 = layers_rho(n+1);
-            sld_1 = sld_1 - bulk_in_SLD;
 
+            % Find k1..
+            sld_1 = layers_rho(n+1) - bulk_in_SLD;
             k1 = findkn(k0, sld_1);
 
             % Find r01
@@ -54,27 +55,35 @@ for points = 1:length(q)
             r_n_np1 = (nom_n / denom_n) * err_n;
 
             % Find the Phase Factor = (k_n * d_n)
-            phaseFctr = kn * layers_thick(n);
+            beta = kn * layers_thick(n) * ci;
 
             % Create the M_n matrix: */
-            M_n(1,1) = exp(phaseFctr);
-            M_n(1,2) = r_n_np1 * exp(phaseFctr);
-            M_n(2,1) = r_n_np1 * exp(phaseFctr);
-            M_n(2,2) = exp(phaseFctr);
+            M_n(1,1) = exp(beta);
+            M_n(1,2) = r_n_np1 * exp(beta);
+            M_n(2,1) = r_n_np1 * exp(-beta);
+            M_n(2,2) = exp(-beta);
 
-            M_tot = M_tot * M_n;
+            % Create Empty M_res matrix for (M_tot x M_n) result
+            M_res = zeros(2, 2) + 0i;
 
+            % Multiply the matrices
+            M_res = M_tot * M_n;
+
+            % Reassign the values back to M_tot:
+            M_tot = M_res;
+
+            % Point to k_n+1 and sld_n+1 via kn_ptr sld_n_ptr:
             kn_ptr = knp1;
 
         end
 
     end
-    %R = abs(M_res(2,2)/M_res(1,1));
-    %ref(points) = R^2;
-    num = M_tot(2 , 1)*conj(M_tot(2 , 1));
-    den = M_tot(1 , 1)*conj(M_tot(1 , 1));
-    quo = num/den;
-    ref(points) = abs(quo);
+    R = abs(M_res(2,1)/M_res(1,1));
+    ref(points) = R^2;
+%     num = M_tot(2 , 1)*conj(M_tot(2 , 1));
+%     den = M_tot(1 , 1)*conj(M_tot(1 , 1));
+%     quo = num/den;
+%     ref(points) = abs(quo);
 end
 
 end
@@ -88,7 +97,7 @@ function k0 = findk0(q,bulk_in_SLD)
 
 q_sqrd = q^2;
 k0 = sqrt((q_sqrd / 4) + 4 * pi * bulk_in_SLD);
-%k0 = complex(k0,0);
+%k0 = complex(k0,(0 + eps));
 
 end
 

@@ -89,15 +89,10 @@ end
 end
 
 
-
-% ral space IT contact
-% laurence.brazil@stfc.ac.uk
-
 function k0 = findk0(q,bulk_in_SLD)
 
 q_sqrd = q^2;
 k0 = sqrt((q_sqrd / 4) + 4 * pi * bulk_in_SLD);
-%k0 = complex(k0,(0 + eps));
 
 end
 

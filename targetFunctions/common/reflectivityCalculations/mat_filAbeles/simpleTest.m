@@ -18,7 +18,7 @@ N = length(thick);
 
 R = abeles_reflect_matlab(q,N,thick,rho,rough);
 
-figure(1); clf
+figure(2); clf
 semilogy(q,R);
 
 % hold on

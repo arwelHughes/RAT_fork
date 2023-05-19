@@ -11,7 +11,8 @@ for points = 1:length(q)
 
     Q = q(points);
     bulk_in_SLD = complex(layers_rho(1),tiny);
-    k0 = findk0(Q, bulk_in_SLD);
+    %k0 = findk0(Q, bulk_in_SLD);
+    k0 = Q/2;
 
     for n = 1:N-1
 
@@ -89,12 +90,12 @@ end
 end
 
 
-function k0 = findk0(q,bulk_in_SLD)
-
-q_sqrd = q^2;
-k0 = sqrt((q_sqrd / 4) + 4 * pi * bulk_in_SLD);
-
-end
+% function k0 = findk0(q,bulk_in_SLD)
+% 
+% q_sqrd = q^2;
+% k0 = sqrt((q_sqrd / 4) + 4 * pi * bulk_in_SLD);
+% 
+% end
 
 
 function kn = findkn(k0,sld)

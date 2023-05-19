@@ -11,7 +11,7 @@ layers = [ 0     nbair  3
           100    4e-6      3
           0      nbsub  srough ];
 
-q = linspace(0.01,0.3,500);
+q = linspace(0.01,0.5,500);
 
 % Run the new calculation:
 N = 4;
@@ -19,9 +19,12 @@ N = 4;
 thick = layers(:,1);
 sld = layers(:,2);
 sig = layers(:,3);
+im = zeros(length(thick),1);
+imSld = [thick sld im sig];
+
 
 refNew = abeles_reflect_matlab(q,N,thick,sld,sig);
-
+%refNew = abelesReflectWrapper_mex(q',imSld);
 
 % Run the old calculation
 slds = layers(2:3,:);

@@ -2,7 +2,7 @@ clear
 
 
 % Compare output of new abeles to previous
-nbair = 0;
+nbair = 2.073e-6;
 nbsub = 6.35e-6;
 srough = 5;
 

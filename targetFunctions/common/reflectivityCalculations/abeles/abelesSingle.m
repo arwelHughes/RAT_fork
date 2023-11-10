@@ -6,7 +6,7 @@ function ref = abelesSingle(q,N,layers_thick,layers_rho,layers_sig)
 % Pre-allocation
 tiny = 1e-30;
 ci = complex(0,1);
-c0 = complex(0,0);
+c0 = complex(0,tiny);
 M_tot = [c0 c0 ; c0 c0];
 M_n = [c0 c0 ; c0 c0];
 M_res = [c0 c0 ; c0 c0];
@@ -55,7 +55,7 @@ for points = 1:length(q)
             sld_np1 = sld_np1 - bulk_in_SLD;
 
             if isreal(sld_np1)  % This check may not be necessary
-                sld_np1 = complex(sld_np1,eps);
+                sld_np1 = complex(sld_np1,tiny);
             end
 
             kn = kn_ptr;
@@ -87,7 +87,6 @@ for points = 1:length(q)
             kn_ptr = knp1;
 
         end
-
     end
     R = abs(M_res(2,1)/M_res(1,1));
     ref(points) = R^2;

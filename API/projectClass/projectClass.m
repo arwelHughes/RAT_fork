@@ -1,4 +1,4 @@
-classdef projectClass < handle & matlab.mixin.CustomDisplay
+classdef projectClass < handle & matlab.mixin.CustomDisplay 
     
     % Class definition for Standard Layers with no absorption.
     % Layers defined in terms of thickness, roughness, real SLD and
@@ -608,6 +608,13 @@ classdef projectClass < handle & matlab.mixin.CustomDisplay
             obj.resolution.removeResolution(row);
         end
         
+        function obj = setResolution(obj, row)
+            % Sets the resolution
+
+
+            obj.resolution.setResolution(obj, row);
+
+        end
         
         % ------------------------------------------------------------
         %   Editing of Data block
@@ -1130,6 +1137,13 @@ classdef projectClass < handle & matlab.mixin.CustomDisplay
             fclose(fileID);
 
         end
+
+%         function newObj = copy(obj)
+% 
+%             newObj = projectClass(obj.experimentName, obj.calculationType, obj.modelType, obj.geometry, obj.absorption);
+%             newObj = copyProperties(obj, newObj);
+% 
+%         end
         
     end     % end public methods
     

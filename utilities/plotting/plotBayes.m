@@ -8,7 +8,7 @@ function plotBayes(problem, results)
     h3 = figure(40); clf
     plotHists(results,h3,'smooth',true)
     
-    h4 = figure(5); clf
+    h4 = figure(50); clf
     cornerPlot(results,h4,'smooth',false)
     
     figure(60); clf

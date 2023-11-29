@@ -35,9 +35,15 @@ tolerance = controls.nsTolerance;
 likelihood = @nsIntraFun;
 Nmcmc = controls.Nmcmc;
 data = {problemDef ; controls ; problemDefLimits ; problemDefCells};
+switch controls.display
+    case 'iter'
+        disp = 1;
+    otherwise
+        disp = 0;
+end
 
 [logZ, nest_samples, post_samples, H] = nestedSampler(data, Nlive, Nmcmc, ...
-    tolerance, likelihood, model, priorList, fitNames);
+    tolerance, likelihood, model, priorList, fitNames, disp);
 
 % Process the results...
 nPars = length(fitNames);

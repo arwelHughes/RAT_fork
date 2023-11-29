@@ -1,5 +1,5 @@
 function [logZ, nest_samples, post_samples,H] = nestedSampler(data, ...
-          Nlive, Nmcmc, tolerance, flike, model, prior, parnames)
+          Nlive, Nmcmc, tolerance, flike, model, prior, parnames, disp)
 
 % function [logZ, nest_samples, post_samples] = nestedSampler(data, ...
 %           Nlive, Nmcmc, tolerance, likelihood, model, prior, extraparams)
@@ -51,9 +51,12 @@ global DEBUG;
 
 extraparvals = [];
 
-
+% Initial values
 verbose = 1;
 DEBUG = 0;
+
+% Modify 'verbose' according to disp
+verbose = disp;
 
 % get the number of parameters from the prior array
 D = size(prior,1);
@@ -261,7 +264,8 @@ while tol > tolerance || j <= Nlive
     tol = logPlus(logZ, logLmax - (j/Nlive)) - logZ;
     
     % display progress (optional)
-    if verbose
+    % Don't need to display every iteration
+    if verbose && (rem(j,100) == 0)
         fprintf('log(Z): %.5e, tol = %.5e, K = %d, iteration = %d, H = %.5e\n', ...
                  logZ, tol, int32(K), int32(j), H);
     end

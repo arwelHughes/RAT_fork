@@ -144,7 +144,7 @@ for i = 1:numberOfContrasts
 end
 
 % Now plot the SLD's
-subplot(1,2,2); hold on
+subplot(1,2,2); hold on; box on
 
 for i = 1:numberOfContrasts
     

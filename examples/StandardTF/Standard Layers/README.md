@@ -12,7 +12,7 @@ the carry out a Bayesian analysis using 'DREAM'.
 In the set up of the model, we set Gaussian priors on some of the parameters,
 then print the results.
 
-Alternatively, you can see this all together in the 'dspc_bilaye_sheet' Matlab
+Alternatively, you can see this all together in the 'dspc_bilayer_sheet' Matlab
 Live worksheet.
 
 ===

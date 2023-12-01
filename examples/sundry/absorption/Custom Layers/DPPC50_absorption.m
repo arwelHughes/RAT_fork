@@ -123,3 +123,10 @@ problem.addContrast('name',       'H2O up',...
 for i = 1:4
     problem.setContrastModel(i,'DPPC absorption');
 end
+
+
+% Now make a controls block....
+controls = controlsClass();
+controls.resamPars(2) = 150;
+controls.parallel = 'contrasts';
+

@@ -48,7 +48,7 @@ oxSurf = siSurf + oxideThickness;
 % Water Layer.....
 % waterCentre = oxSurf + (waterThick /2);
 % watVF  = asymconvstep(z,waterThick,waterCentre,oxRough,bilayerRough,1);
-watSurf = oxSurf;% + waterThick;
+watSurf = oxSurf + waterThick;
 
 % Lower head
 lowHeadCen = watSurf + (headThick / 2);

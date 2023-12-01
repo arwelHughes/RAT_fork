@@ -76,7 +76,7 @@ problem.setData(4,'dataRange',[0.013 0.37]);
 % 
 % Add the custom file to the project....
 
-problem.addCustomFile('DPPC Model','bilOnSamFitFunc.m','matlab',pwd);
+problem.addCustomFile('DSPC Model','bilOnSamFitFunc.m','matlab',pwd);
 %% 
 % 
 % 

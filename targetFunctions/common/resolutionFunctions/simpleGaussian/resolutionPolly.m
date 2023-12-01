@@ -24,7 +24,6 @@ for j = 1:points
         ihi = points - j;
     end
     
-%    try
     for i = ilow:ihi
         g = exp(-1*((xdata(j+i)-xdata(j))/(res*xdata(j)))^2);
         sumg = sumg + g;

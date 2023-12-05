@@ -16,7 +16,10 @@ outputs a continuous SLD profile for each contrast.
 
 The examples in the sub-directories are as follows:
 
-- Standard Layers: 
+- Standard Layers:  This contains an analysis of a DSPC floating bilayer, on
+                    a Silane SAM. 
+
+- Custom Layers:    
 
 ===
 

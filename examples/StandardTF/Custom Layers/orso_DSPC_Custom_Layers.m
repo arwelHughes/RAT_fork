@@ -1,4 +1,4 @@
-%function problem = orsoDSPCCustomLayers()
+
 
 %% Custom Layers Example for Supported DSPC layer.
 % 
@@ -65,10 +65,10 @@ D2O_data = dlmread('c_PLP0016596.dat');
 SMW_data = dlmread('c_PLP0016601.dat');
 H2O_data = dlmread('c_PLP0016607.dat');
 
-% Add the data to the project
-problem.addData('Bilayer / D2O', D2O_data(:,1:3));
-problem.addData('Bilayer / SMW', SMW_data(:,1:3));
-problem.addData('Bilayer / H2O', H2O_data(:,1:3));
+% Add the data to the project - note this data has a resolution 4th column
+problem.addData('Bilayer / D2O', D2O_data);
+problem.addData('Bilayer / SMW', SMW_data); 
+problem.addData('Bilayer / H2O', H2O_data);
 
 problem.setData(2,'dataRange',[0.013 0.37]);
 problem.setData(3,'dataRange',[0.013 0.37]);
@@ -105,6 +105,10 @@ problem.setBackground(1,'name','Background D2O', 'value1','Backs par D2O');
 % Set the scalefactor...
 problem.setScalefactor(1,'Value',1,'min',0.5,'max',2,'fit',true);
 
+% Also, we are going to use the data resolution. Make a resolution for
+% this...
+problem.addResolution('Data Resolution','data');
+
 %% 
 % 
 % 
@@ -113,7 +117,7 @@ problem.setScalefactor(1,'Value',1,'min',0.5,'max',2,'fit',true);
 % D2O contrast..
 problem.addContrast('name','Bilayer / D2O',...
     'background','Background D2O',...
-    'resolution','Resolution 1',...
+    'resolution','Data Resolution',...
     'scalefactor', 'Scalefactor 1',...
     'nbs', 'SLD D2O',...        % This is bulk out ('Nb Subs')
     'nba', 'Silicon',...        % This is bulk in ('Nb Air')
@@ -122,7 +126,7 @@ problem.addContrast('name','Bilayer / D2O',...
 % SMW contrast..
 problem.addContrast('name','Bilayer / SMW',...
     'background','Background SMW',...
-    'resolution','Resolution 1',...
+    'resolution','Data Resolution',...
     'scalefactor', 'Scalefactor 1',...
     'nbs', 'SLD SMW',...        % This is bulk out
     'nba', 'Silicon',...        % This is bulk in
@@ -131,7 +135,7 @@ problem.addContrast('name','Bilayer / SMW',...
 % SMW contrast..
 problem.addContrast('name','Bilayer / H2O',...
     'background','Background H2O',...
-    'resolution','Resolution 1',...
+    'resolution','Data Resolution',...
     'scalefactor', 'Scalefactor 1',...
     'nbs', 'SLD H2O',...        % This is bulk out
     'nba', 'Silicon',...        % This is bulk in
@@ -146,7 +150,7 @@ problem.setContrastModel(2,'DSPC Model');
 problem.setContrastModel(3,'DSPC Model');
 
 
-%end
+
 
 
 

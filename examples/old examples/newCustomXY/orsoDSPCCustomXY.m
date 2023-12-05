@@ -24,9 +24,9 @@ Parameters = {
         {'Oxide thick',          1,          10,         30,     true   };
         {'Oxide Hydration'       0,          0,       0.5,     true   };
         {'Water Thick'          1,           0,         20,     true   };
-        {'Head Thick'            8           7,         15,     true   };
-        {'Head SLD'            1.4e-6,      1.7e-6,     1.9e-6,  true   };
-        {'Tails Thick'          15,          15,         20,     true   };
+        {'Head Thick'            8           7,         15,     true, 'gaussian', 10, 2};
+        {'Head SLD'            1.4e-6,      1.7e-6,     1.9e-6,  true 'gaussian', 1.7e-6, 0.5e-6};
+        {'Tails Thick'          15,          15,         25,     true   };
         {'Tails SLD'           -0.5e-6,    -0.4e-6,    -0.1e-6,  true   };
         {'Methyl Thick'          3,           3,          7,     true   };
         {'Bilayer Rough'         3,           3,          7,     true   };
@@ -76,7 +76,7 @@ problem.setData(4,'dataRange',[0.013 0.37]);
 % 
 % Add the custom file to the project....
 
-problem.addCustomFile('DSPC Model','bilOnSamFitFunc.m','matlab',pwd);
+problem.addCustomFile('DSPC Model','DSPCCustomXY.m','matlab',pwd);
 %% 
 % 
 % 

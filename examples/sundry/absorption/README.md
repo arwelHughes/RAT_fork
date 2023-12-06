@@ -30,5 +30,9 @@ the Permalloy, to account for non-flat data below the critical edge.
 
 ![ce](./images/critEdge.png)
 
+As usual, in this example there is both a script (DPPC50_absorption.m), or a
+worksheet (DPPC_absorption_worksheet.mlx).
+
+
 ===
 

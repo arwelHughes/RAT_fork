@@ -1,9 +1,17 @@
-function [SLD, subRough] = DSPC_Custom_XY(params,bulk_in,bulk_out,contrast)
-
-debug = false;  % controls.whether we make debug plot....
+function [SLD, subRough, varargout] = DSPC_Custom_XY_2(params,bulk_in,bulk_out,contrast)
 
 % This function makes a model of a supported DSPC bilayer using volume
 % restricted distribution functions.
+
+
+debug = false;      % controls.whether we make debug plot....
+
+global outputVF;    % This is a flag which controls if we output our VF's.
+                    % If this is set to 'false', then this function can be
+                    % used as a RAT custom function (otherwise RAT will
+                    % fail with 'too many outputs' error....). Set to
+                    % 'true', the third (optional) output parameter is our
+                    % Volume Fractions.
 
 % Split up the parameters
 subRough = params(1);
@@ -145,6 +153,15 @@ if debug
     plot(z,sldHeadR);
     plot(z,sldWat);
     plot(z,totSLD,'k-','LineWidth',2.0)
+end
+
+% If asked, output our Volume Fractions as a third parameter....
+if outputVF
+    % Make one array of out VF's...
+    allVFs = [z(:) vfSilicon(:) vfOxide(:) vfHeadL(:) vfTails(:) vfHeadR(:) vfWat(:)];
+    
+    % Assign this to our optional output....
+    varargout = {allVFs};
 end
 
 end

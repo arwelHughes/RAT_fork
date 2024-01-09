@@ -1,4 +1,4 @@
-problem = project(calcType="domains");
+problem = createProject(calcType="domains");
 problem.setModelType('custom XY');
 problem.setGeometry('air/substrate');
 
@@ -14,11 +14,11 @@ params = {{'Oxide thick',   10,         20,     50,     true}
 problem.addParameterGroup(params);
 
 
-problem.setBacksPar(1,'name','Backs par D2O','fit',true,'min',1e-10,'max',1e-5,'val',1e-07);
+problem.setBackgroundParam(1,'name','Backs par D2O','fit',true,'min',1e-10,'max',1e-5,'val',1e-07);
 
 % Add two new backs parameters for the other two..
-problem.addBacksPar('Backs par SMW',1e-10,1e-7,1e-5,true);
-problem.addBacksPar('Backs par H2O',1e-10,1e-7,1e-5,true);
+problem.addBackgroundParam('Backs par SMW',1e-10,1e-7,1e-5,true);
+problem.addBackgroundParam('Backs par H2O',1e-10,1e-7,1e-5,true);
 
 % And add the two new constant backgrounds..
 problem.addBackground('Background SMW','constant','Backs par SMW');
@@ -47,8 +47,8 @@ problem.addContrast('name','Test',...
     'background','Background D2O',...
     'resolution','Resolution 1',...
     'scalefactor', 'Scalefactor 1',...
-    'nbs', 'silicon',...        % This is bulk out ('Nb Subs')
-    'nba', 'Air',....           % This is bulk in ('Nb Air);
+    'Bulkin', 'Air',...        % This is bulk out ('Nb Subs')
+    'Bulkout', 'Silicon',....           % This is bulk in ('Nb Air);
     'domainRatio', 'Domain Ratio 1',...
     'data', 'Simulation');
 

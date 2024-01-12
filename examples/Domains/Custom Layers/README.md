@@ -6,7 +6,7 @@ This is an example of using incoherent summing ('domains') from custom
 layers models.
 
 These are broadly the same as normal custom layers models, except that the
-input to the cutom function contains an additional 'domains' parameter..
+input to the custom function contains an additional 'domains' parameter..
 
 ![FS](functionStart.png)
 

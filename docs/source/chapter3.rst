@@ -1,5 +1,7 @@
 .. _chapter3:
 
+.. toctree::
+        testMe
 
 Custom Models
 .............

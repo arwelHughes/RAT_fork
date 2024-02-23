@@ -59,6 +59,7 @@ function plotRefSLDHelper(data, noDelay)
                 if size(layers,2) == 4
                     layer = [layer(:,1:2),layer(:,4)];
                 end
+					
                 numberOfLayers = size(layer, 1);
                 nrepeats = 1;
                 newProf = makeSLDProfileXY(bulkIn,bulkOut,roughness,layer,numberOfLayers,nrepeats);

@@ -51,7 +51,6 @@ In this section we'll look at the project definition class in more detail, we'll
     conversion utilities (:ref:`conversionFuncs`). In fact, for those who prefer a graphical model builder, using the RasCAL1 GUI to build a basic model and then converting to RAT is a viable workflow.
 
 
-
 An example - A simple model of a lipid layer
 ============================================
 

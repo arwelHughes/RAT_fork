@@ -1,6 +1,8 @@
 # customBilayer.py
 import numpy as np
+from numba import njit
 
+@njit
 def customBilayer(params, bulk_in, bulk_out, contrast):
     params = np.array(params);
     bulk_in = np.array(bulk_in);

@@ -562,7 +562,7 @@ A simple stack of such layers covers any regions of your model that are intended
         a = (x-l)./((2^0.5)*s1);
         b = (x-r)./((2^0.5)*s2);
 
-        f = (h/2)*(erf(a)-erf(b));
+        f = (h/2)*(erf(a)-tanh(b));
 
         layerSurface = r;
 

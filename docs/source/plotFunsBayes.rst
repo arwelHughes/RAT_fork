@@ -26,7 +26,7 @@ By default, this shows a standard reflectivity plot with a 65% shaded confidence
 
 There are a number of options to customise the plot:
 
-**Interval** - You can sepcify either the 65% or 95% confidence interval to display:
+**Interval** - You can specify either the 65% or 95% confidence interval to display:
 
 .. code-block:: MATLAB
 

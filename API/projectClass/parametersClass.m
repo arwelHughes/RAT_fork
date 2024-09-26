@@ -116,7 +116,7 @@ classdef parametersClass < tableUtilities
                 end
 
                 if values(2) < values(1) || values(2) > values(3)
-                    throw(exceptions.invalidValue(sprintf('Parameter value %f must be within the limits %f -- %f', values(2), values(1), values(3))));
+                    %throw(exceptions.invalidValue(sprintf('Parameter value %f must be within the limits %f -- %f', values(2), values(1), values(3))));
                 end
 
                 if ~islogical(fit)

@@ -61,7 +61,7 @@ function [problemStruct,fitNames,fitPriors] = packParamsPriors(problemStruct,pro
             fitNames{fitCounter} = problemCells{8}{n};
             thisPrior = priors.backgroundParam{n};
             if (strcmpi(thisPrior{2},'gaussian'))
-                thisGausPrior = [thisPrior{4} thisPrior{5}];
+                thisGausPrior = [thisPrior{3} thisPrior{4}];
             else
                 thisGausPrior = [0 Inf];
             end
@@ -84,7 +84,7 @@ function [problemStruct,fitNames,fitPriors] = packParamsPriors(problemStruct,pro
             fitNames{fitCounter} = problemCells{9}{n};
             thisPrior = priors.scalefactor{n};
             if (strcmpi(thisPrior{2},'gaussian'))
-                thisGausPrior = [thisPrior{4} thisPrior{5}];
+                thisGausPrior = [thisPrior{3} thisPrior{4}];
             else
                 thisGausPrior = [0 Inf];
             end
@@ -107,7 +107,7 @@ function [problemStruct,fitNames,fitPriors] = packParamsPriors(problemStruct,pro
             fitNames{fitCounter} = problemCells{10}{n};
             thisPrior = priors.qzshift{n};
             if (strcmpi(thisPrior{2},'gaussian'))
-                thisGausPrior = [thisPrior{4} thisPrior{5}];
+                thisGausPrior = [thisPrior{3} thisPrior{4}];
             else
                 thisGausPrior = [0 Inf];
             end
@@ -130,7 +130,7 @@ function [problemStruct,fitNames,fitPriors] = packParamsPriors(problemStruct,pro
             fitNames{fitCounter} = problemCells{11}{n};
             thisPrior = priors.bulkIn{n};
             if (strcmpi(thisPrior{2},'gaussian'))
-                thisGausPrior = [thisPrior{4} thisPrior{5}];
+                thisGausPrior = [thisPrior{3} thisPrior{4}];
             else
                 thisGausPrior = [0 Inf];
             end
@@ -176,7 +176,7 @@ function [problemStruct,fitNames,fitPriors] = packParamsPriors(problemStruct,pro
             fitNames{fitCounter} = problemCells{13}{n};
             thisPrior = priors.resolutionParam{n};
             if (strcmpi(thisPrior{2},'gaussian'))
-                thisGausPrior = [thisPrior{4} thisPrior{5}];
+                thisGausPrior = [thisPrior{3} thisPrior{4}];
             else
                 thisGausPrior = [0 Inf];
             end
@@ -199,7 +199,7 @@ function [problemStruct,fitNames,fitPriors] = packParamsPriors(problemStruct,pro
             fitNames{fitCounter} = problemCells{20}{n};
             thisPrior = priors.domainRatio{n};
             if (strcmpi(thisPrior{2},'gaussian'))
-                thisGausPrior = [thisPrior{4} thisPrior{5}];
+                thisGausPrior = [thisPrior{3} thisPrior{4}];
             else
                 thisGausPrior = [0 Inf];
             end

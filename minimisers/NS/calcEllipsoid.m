@@ -65,7 +65,27 @@ VE = const*sqrt(det( fB * C ));
 % expand volume of bounding ellipsoid to VS if necessary
 fV = 1;
 if VE < VS
+    % Error in compiled code here.....
+%       At least one argument must be complex when raising a matrix to a non-integer, scalar power.
+% 
+%       Error in mpower>matrix_to_scalar_power (line 109)
+%       coder.internal.error('Coder:toolbox:mpower_needComplexInput');
+% 
+%       Error in  ^  (line 46)
+%       c = matrix_to_scalar_power(a,b(1));
+% 
+%       Error in calcEllipsoid (line 68)
+%       fV = (VS/VE)^(2/ndims);
+
+
     fV = (VS/VE)^(2/ndims);
+    
+    % Could try.....
+    % x = 2/ndims;
+    % A = log(VS/VE) * x;
+    % fV = exp(A);
+
+
     VE = VS;
 end
 
@@ -84,7 +104,7 @@ end
 % Error in calcEllipsoid (line 73)
 % B = fV * fB * C;
 
-% B = fV * fB * C;
+%B = fV * fB * C;
 B = fV(1) * fB(1) * C;
 
 return

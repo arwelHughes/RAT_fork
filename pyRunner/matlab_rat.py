@@ -4,6 +4,10 @@
 Created on Fri Sep 12 10:59:51 2025
 
 @author: arwel
+
+
+An example of calling matlab RAT from python
+
 """
 import ratapi as RAT
 import matlab.engine as engine
@@ -38,26 +42,13 @@ def matlab_rat(problem,controls,eng):
     # go back to our original directory....
     eng.cd(currPath, nargout=0)
     
-    # # Load the jsons into matlabRAT
-    # probLoad = "problem = jsonToProject('pyRAT_problem')"
-    # eng.feval(probLoad,nargout=0)
-    
-    # controlsLoad = "controls = jsonToProject('pyRAT_controls')"
-    # eng.feval(controlsLoad,nargout=0)
-    
-    # # Run RAT....
-    # ratRun = "[problem,results] = RAT(problem,controls);"
-    # eng.feval(ratRun,nargout=0)
-
-    
     # Run the project in matlabRAT
     ratRun = "runFromPython('pyRAT_problem.json','pyRat_controls.json')"
     eng.eval(ratRun,nargout=0)
     
-    # After a sufficient delay, load the results back in....
+    # load the results back in....
     newProblem = RAT.Project.load('pyRAT_problem_project_updated.json')
     results = RAT.Results.load('pyRAT_problem_results.json')
-    
     
     #Go back to the calling func...
     return newProblem, results
@@ -65,15 +56,18 @@ def matlab_rat(problem,controls,eng):
 
 if __name__ == "__main__":
     
-    # Connect to Matlab engine.....
+    # Connect to Matlab engine..... (this should actually connect to the existing 
+    # pythonRAT Matlab session instead of starting a new one..
     eng = engine.start_matlab()
     
+    # Make the project class - usual custom DSPC example but with a Matlab custom model
     import customDSPC
     
     problem = customDSPC.customDSPC()
     controls = RAT.Controls()
     controls.procedure = 'de'
     
+    # Send this to Matlab RAT....
     newProblem, results = matlab_rat(problem,controls,eng)
     
     eng.quit()

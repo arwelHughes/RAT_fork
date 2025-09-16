@@ -104,7 +104,7 @@ end
 
 % Save the file 
 encoded = jsonencode(totalStruct,ConvertInfAndNaN=false);
-encoded = replace(encoded,'Infinity','Inf');
+%encoded = replace(encoded,'Infinity','Inf');
 
 [path,filename,~] = fileparts(filename);
 fid = fullfile(path, append(filename, '.json'));
@@ -303,9 +303,12 @@ varNames =  ["name","filename","function_name","language","path"];
 customTable.Properties.VariableNames = varNames;
 
 % Everything needs to be chars, not strings...
-for i = 1:length(customTable.Properties.VariableNames)
-    customTable.(varNames(i)) = char(customTable.(varNames(i)));
-end
+% for i = 1:length(customTable.Properties.VariableNames)
+%     thisChar = char(customTable.(varNames(i)));
+%     if ~isempty(thisChar)
+%         customTable.(varNames(i)) = thisChar;
+%     end
+% end
 
 customFileStruct = table2struct(customTable);
 

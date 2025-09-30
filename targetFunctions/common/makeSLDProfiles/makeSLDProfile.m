@@ -2,6 +2,10 @@ function SLDProfile = makeSLDProfile(bulkIn,bulkOut,layers,ssub,nrepeats)
 
 numberOfLayers = size(layers,1);
 
+if numberOfLayers == 1 && ~all(layers) 
+    numberOfLayers = 0;
+end
+
 if numberOfLayers>0
     totalThickness = sum(layers(:,1));
     totalRange = (totalThickness*nrepeats) + 150;

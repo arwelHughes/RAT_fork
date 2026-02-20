@@ -16,13 +16,22 @@ classdef testJsonToProject < matlab.unittest.TestCase
 
         resultFile = {'result', ...
             'result_bayes'}
+
+        controlsParams = {{'calculate', 'numSimulationPoints', 100},...
+                          {'simplex' 'xTolerance', 19},...
+                          {'de' 'populationSize', 200},...
+                          {'ns' 'nLive', 19},...
+                          {'dream' 'nSamples', 200}}
+        r2Tests = {{'normalReflectivity', 'standardLayers', 'standardLayersDSPCScript'},...
+                   {'domains', 'customLayers', 'domainsCustomLayersScript'},...
+                   {'domains', 'customXY', 'domainsCustomXYScript'}}
     end
 
     methods(TestClassSetup)
         function addDataPath(testCase)
             import matlab.unittest.fixtures.PathFixture
             path = fullfile(getappdata(0, 'root'), 'tests', 'testJsonToProject');
-            testCase.applyFixture(PathFixture(path))  
+            testCase.applyFixture(PathFixture(path));
         end
         function setWorkingFolder(testCase)
             import matlab.unittest.fixtures.WorkingFolderFixture;
@@ -54,13 +63,9 @@ classdef testJsonToProject < matlab.unittest.TestCase
             end
        end
 
-       function testJsonControlsConversion(testCase)
+       function testJsonControlsConversion(testCase, controlsParams)
             controls = controlsClass();
-            controls.numSimulationPoints = 100;
-            controls.xTolerance = 19;
-            controls.populationSize = 200;
-            controls.nLive = 140;
-            controls.nSamples = 200;
+            controls.setProcedure(controlsParams{1}, controlsParams{2:end});
 
             controlsToJson(controls, "test.json");
             controls2 = jsonToControls("test.json");
@@ -69,6 +74,54 @@ classdef testJsonToProject < matlab.unittest.TestCase
             for i = 1:length(props)
                 testCase.verifyEqual(controls.(props{i}), controls2.(props{i}));
             end
+       end
+
+       function testR2Conversion(testCase, r2Tests)
+            scriptName = r2Tests{3};
+            outFolder = ['save_' scriptName];
+           
+            copyfile(fullfile(getappdata(0, 'root'), 'examples', r2Tests{1}, r2Tests{2}), ...
+                     fullfile(pwd))
+            evalc(scriptName);
+            
+            controls = controlsClass();
+            [~, project, result] =  evalc('RAT(problem, controls);');
+
+            saveR2(outFolder,  project, result, controls)
+            testCase.verifyEqual(exist(fullfile(pwd, outFolder, 'results.json'), 'file'), 2)
+            testCase.verifyEqual(exist(fullfile(pwd, outFolder, 'project.json'), 'file'), 2)
+            testCase.verifyEqual(exist(fullfile(pwd, outFolder, 'controls.json'), 'file'), 2)
+            for i=1:project.customFile.rowCount
+                customFile = project.customFile.varTable{i, 2};
+                testCase.verifyEqual(exist(fullfile(pwd, outFolder, customFile), 'file'), 2)
+            end
+
+            [project2, result2] = loadR2(outFolder);
+            props = properties(project);
+            for i = 1:length(props)
+                % verifies the problem name, model type and geometry
+                testCase.verifyEqual(project.experimentName, project2.experimentName);
+                testCase.verifyEqual(project.modelType, project2.modelType);
+                testCase.verifyEqual(project.geometry, project2.geometry);
+    
+                % verifies the count of problem properties
+                testCase.verifyEqual(project.contrasts.numberOfContrasts, project2.contrasts.numberOfContrasts);
+                testCase.verifyEqual(project.parameters.rowCount, project2.parameters.rowCount);
+                testCase.verifyEqual(project.bulkOut.rowCount, project2.bulkOut.rowCount);
+                testCase.verifyEqual(project.background.backgrounds.rowCount, project2.background.backgrounds.rowCount);
+                testCase.verifyEqual(project.data.rowCount, project2.data.rowCount);
+                testCase.verifyEqual(project.scalefactors.rowCount, project2.scalefactors.rowCount);
+                if isa(project.layers, 'layersClass')
+                    testCase.verifyEqual(project.layers.rowCount, project2.layers.rowCount);
+                end
+                testCase.verifyEqual(project.bulkIn.rowCount, project2.bulkIn.rowCount);
+            end
+
+            props = properties(result);
+            for i = 1:length(props)
+                testCase.verifyEqual(result.(props{i}), result2.(props{i}));
+            end
+            close all
         end
     end
 

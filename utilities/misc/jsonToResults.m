@@ -53,37 +53,48 @@ function outCell = sldArray2Cells(inArray,nContrasts)
 
 % Check we don't already have cells..
 if iscell(inArray)
-    nArrays = numel(inArray);
-    if nArrays == nContrasts % (not domains)
-        outCell = inArray;
-    else  % ..domains - [n x 2] cell array
-        outCell = reshape(inArray,nContrasts,2);
+    row = size(inArray, 1);
+    col = size(inArray(1),1);
+    outCell = cell(row, col);
+    for i=1:row
+        for j=1:col
+            outCell{i, j} = squeeze(inArray{i}{j});
+        end
     end
 else
-
-    % Get number of profiles...
-    nProfiles = size(inArray,1);
-    
-    % Make them into cells....
-    for i = 1:nProfiles
-        thisSLD = inArray(i,:,:,:);
-        thisSLD = squeeze(thisSLD); % Collapse singleton dims....
-        outCell{i,1} = thisSLD;
-    end
-
-    % If domains, reorganise the cells...
-    if nProfiles > nContrasts
-        outCell = transpose(reshape(outCell,nContrasts,2));
+    row = size(inArray, 1);
+    col = size(inArray(1),1);
+    outCell = cell(row, col);
+    for i=1:row
+        for j=1:col
+            outCell{i, j} = squeeze(inArray(i, j, :, :));
+        end
     end
 end
-
-% We have an annoying automatic reshape of single layers into columns.
-% Fix this...
-for i = 1:numel(outCell)
-    if iscolumn(outCell{i})
-        outCell{i} = transpose(outCell{i});
-    end
-end
+% 
+%     % Get number of profiles...
+%     nProfiles = size(inArray,1);
+% 
+%     % Make them into cells....
+%     for i = 1:nProfiles
+%         thisSLD = inArray(i,:,:,:);
+%         thisSLD = squeeze(thisSLD); % Collapse singleton dims....
+%         outCell{i,1} = thisSLD;
+%     end
+% 
+%     % If domains, reorganise the cells...
+%     if nProfiles > nContrasts
+%         outCell = transpose(reshape(outCell,nContrasts,2));
+%     end
+% end
+% 
+% % We have an annoying automatic reshape of single layers into columns.
+% % Fix this...
+% for i = 1:numel(outCell)
+%     if iscolumn(outCell{i})
+%         outCell{i} = transpose(outCell{i});
+%     end
+% end
 
 end
 

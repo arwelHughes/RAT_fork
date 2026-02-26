@@ -29,7 +29,6 @@ function saveR2(dirName, problem, results, controls)
     if exist(dirName,'dir') ~= 7
         mkdir(dirName);
     end
-    currentDir = pwd; % Save the current directory name
     
     % Do some custom file housekeeping. We need to copy these to our new
     % folder if there are any..
@@ -40,16 +39,11 @@ function saveR2(dirName, problem, results, controls)
     
         % Change the paths of our custom files in projectClass to point to our
         % new files..
-        tmpProblem.setCustomFile(i,'path',fullfile(currentDir,dirName));
+        tmpProblem.setCustomFile(i,'path',fullfile(pwd,dirName));
     end
     
     % Go to our new directory and export the jsons...
-    cd(dirName);
-    projectToJson(problem,'project.json');
-    resultsToJson(results,'results.json');
-    controlsToJson(controls,'controls.json');
-    
-    % Go back to our original dir and we are done...
-    cd(currentDir);
-
+    projectToJson(problem, fullfile(dirName, 'project.json'));
+    resultsToJson(results,fullfile(dirName, 'results.json'));
+    controlsToJson(controls, fullfile(dirName, 'controls.json'));
 end

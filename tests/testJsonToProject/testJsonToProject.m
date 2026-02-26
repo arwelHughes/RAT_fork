@@ -85,7 +85,8 @@ classdef testJsonToProject < matlab.unittest.TestCase
             evalc(scriptName);
             
             controls = controlsClass();
-            [~, project, result] =  evalc('RAT(problem, controls);');
+            controls.display = 'off';
+            [project, result] =  RAT(problem, controls);
 
             saveR2(outFolder,  project, result, controls)
             testCase.verifyEqual(exist(fullfile(pwd, outFolder, 'results.json'), 'file'), 2)
@@ -97,25 +98,22 @@ classdef testJsonToProject < matlab.unittest.TestCase
             end
 
             [project2, result2] = loadR2(outFolder);
-            props = properties(project);
-            for i = 1:length(props)
-                % verifies the problem name, model type and geometry
-                testCase.verifyEqual(project.experimentName, project2.experimentName);
-                testCase.verifyEqual(project.modelType, project2.modelType);
-                testCase.verifyEqual(project.geometry, project2.geometry);
-    
-                % verifies the count of problem properties
-                testCase.verifyEqual(project.contrasts.numberOfContrasts, project2.contrasts.numberOfContrasts);
-                testCase.verifyEqual(project.parameters.rowCount, project2.parameters.rowCount);
-                testCase.verifyEqual(project.bulkOut.rowCount, project2.bulkOut.rowCount);
-                testCase.verifyEqual(project.background.backgrounds.rowCount, project2.background.backgrounds.rowCount);
-                testCase.verifyEqual(project.data.rowCount, project2.data.rowCount);
-                testCase.verifyEqual(project.scalefactors.rowCount, project2.scalefactors.rowCount);
-                if isa(project.layers, 'layersClass')
-                    testCase.verifyEqual(project.layers.rowCount, project2.layers.rowCount);
-                end
-                testCase.verifyEqual(project.bulkIn.rowCount, project2.bulkIn.rowCount);
+            % verifies the problem name, model type and geometry
+            testCase.verifyEqual(project.experimentName, project2.experimentName);
+            testCase.verifyEqual(project.modelType, project2.modelType);
+            testCase.verifyEqual(project.geometry, project2.geometry);
+
+            % verifies the count of problem properties
+            testCase.verifyEqual(project.contrasts.numberOfContrasts, project2.contrasts.numberOfContrasts);
+            testCase.verifyEqual(project.parameters.rowCount, project2.parameters.rowCount);
+            testCase.verifyEqual(project.bulkOut.rowCount, project2.bulkOut.rowCount);
+            testCase.verifyEqual(project.background.backgrounds.rowCount, project2.background.backgrounds.rowCount);
+            testCase.verifyEqual(project.data.rowCount, project2.data.rowCount);
+            testCase.verifyEqual(project.scalefactors.rowCount, project2.scalefactors.rowCount);
+            if isa(project.layers, 'layersClass')
+                testCase.verifyEqual(project.layers.rowCount, project2.layers.rowCount);
             end
+            testCase.verifyEqual(project.bulkIn.rowCount, project2.bulkIn.rowCount);
 
             props = properties(result);
             for i = 1:length(props)

@@ -16,10 +16,23 @@ tmpResults.sldProfiles = makeCellJson(tmpResults.sldProfiles);
 tmpResults.layers = makeCellJson(tmpResults.layers);
 tmpResults.resampledLayers = makeCellJson(tmpResults.resampledLayers);
 
-encoded = jsonencode(tmpResults,ConvertInfAndNaN=false);
-encoded = strrep(encoded, '"[', '[');
-encoded = strrep(encoded, ']"', ']');
+for prop = {'dreamOutput', 'nestedSamplerOutput', 'confidenceIntervals'}
+    if isfield(tmpResults, prop{1})
+        for fn = fieldnames(tmpResults.(prop{1}))'
+            tmpResults.(prop{1}).(fn{1}) = correctRowArray(tmpResults.(prop{1}).(fn{1}));
+        end
+    end
+end
 
+if isfield(tmpResults,'predictionIntervals')
+    tmpResults.predictionIntervals.reflectivity = correctCellArray(tmpResults.predictionIntervals.reflectivity);
+    tmpResults.predictionIntervals.sld = makeCellJson(tmpResults.predictionIntervals.sld);
+    tmpResults.predictionIntervals.sampleChi = correctRowArray(tmpResults.predictionIntervals.sampleChi);
+end
+
+encoded = jsonencode(tmpResults,ConvertInfAndNaN=false);
+encoded = strrep(encoded, ']"', ']');
+encoded = strrep(encoded, '"[', '[');
 
 [path,filename,~] = fileparts(filename);
 fid = fullfile(path, append(filename, '.json'));
@@ -50,6 +63,13 @@ function outputArray = makeCellJson(cellArray)
         outputArray = {outputArray};
     end
 
+end
+
+function array = correctRowArray(array)
+    % Corrects row array so its written as 2D array in json 
+    if isa(array, "double") && size(array, 1) == 1 && size(array, 2) > 1
+        array = {array};
+    end
 end
 
 function cellArray = correctCellArray(cellArray)

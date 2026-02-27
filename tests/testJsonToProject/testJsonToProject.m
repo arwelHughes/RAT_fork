@@ -15,7 +15,8 @@ classdef testJsonToProject < matlab.unittest.TestCase
             'DSPC_standard_layers'}
 
         resultFile = {'result', ...
-            'result_bayes'}
+                      'result_bayes_dream', ...
+                      'result_bayes_ns'}
 
         controlsParams = {{'calculate', 'numSimulationPoints', 100},...
                           {'simplex' 'xTolerance', 19},...
@@ -57,7 +58,7 @@ classdef testJsonToProject < matlab.unittest.TestCase
             resultsToJson(result, "test.json");
             result2 = jsonToResults("test.json");
 
-            props = properties(result);
+            props = fieldnames(result);
             for i = 1:length(props)
                 testCase.verifyEqual(result.(props{i}), result2.(props{i}));
             end
@@ -115,7 +116,7 @@ classdef testJsonToProject < matlab.unittest.TestCase
             end
             testCase.verifyEqual(project.bulkIn.rowCount, project2.bulkIn.rowCount);
 
-            props = properties(result);
+            props = fieldnames(result);
             for i = 1:length(props)
                 testCase.verifyEqual(result.(props{i}), result2.(props{i}));
             end

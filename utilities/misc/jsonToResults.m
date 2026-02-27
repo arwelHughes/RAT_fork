@@ -18,9 +18,9 @@ results.simulation = simArray2Cells(jsonRes.simulation);
 results.shiftedData = dataArray2Cells(jsonRes.shiftedData);
 results.backgrounds = simArray2Cells(jsonRes.backgrounds);
 results.resolutions = simArray2Cells(jsonRes.resolutions);
-results.sldProfiles = sldArray2Cells(jsonRes.sldProfiles,numel(results.reflectivity));
-results.layers = sldArray2Cells(jsonRes.layers,numel(results.reflectivity));    % Layers array is in the same format as the SLDs
-results.resampledLayers = sldArray2Cells(jsonRes.resampledLayers,numel(results.reflectivity));
+results.sldProfiles = sldArray2Cells(jsonRes.sldProfiles);
+results.layers = sldArray2Cells(jsonRes.layers);    % Layers array is in the same format as the SLDs
+results.resampledLayers = sldArray2Cells(jsonRes.resampledLayers);
 
 % These correctly load in as structs or arrays....
 results.calculationResults = jsonRes.calculationResults;
@@ -35,7 +35,7 @@ results.contrastParams.resample = results.contrastParams.resample';
 if isfield(jsonRes,'predictionIntervals')
     results.predictionIntervals = jsonRes.predictionIntervals;
     results.predictionIntervals.reflectivity = simArray2Cells(results.predictionIntervals.reflectivity);
-    results.predictionIntervals.sld = simArray2Cells(results.predictionIntervals.sld);
+    results.predictionIntervals.sld = sldArray2Cells(results.predictionIntervals.sld);
     
     results.confidenceIntervals = jsonRes.confidenceIntervals;
     results.dreamParams = jsonRes.dreamParams;
@@ -49,12 +49,16 @@ end
 
 % ----------------------------------------------------------
 
-function outCell = sldArray2Cells(inArray,nContrasts)
+function outCell = sldArray2Cells(inArray)
 
 % Check we don't already have cells..
 if iscell(inArray)
-    row = size(inArray, 1);
-    col = size(inArray(1),1);
+    row = size(inArray, 1); 
+    if iscell(inArray{1})
+        col = size(inArray{1}, 1);
+    else
+        col = size(inArray(1),1);
+    end
     outCell = cell(row, col);
     for i=1:row
         for j=1:col
@@ -62,40 +66,16 @@ if iscell(inArray)
         end
     end
 else
-    row = size(inArray, 1);
-    col = size(inArray(1),1);
+    dims = size(inArray);
+    row = dims(1);
+    col = dims(2);
     outCell = cell(row, col);
     for i=1:row
         for j=1:col
-            outCell{i, j} = squeeze(inArray(i, j, :, :));
+            outCell{i, j} = reshape(inArray(i, j, :, :), dims(3:end));
         end
     end
 end
-% 
-%     % Get number of profiles...
-%     nProfiles = size(inArray,1);
-% 
-%     % Make them into cells....
-%     for i = 1:nProfiles
-%         thisSLD = inArray(i,:,:,:);
-%         thisSLD = squeeze(thisSLD); % Collapse singleton dims....
-%         outCell{i,1} = thisSLD;
-%     end
-% 
-%     % If domains, reorganise the cells...
-%     if nProfiles > nContrasts
-%         outCell = transpose(reshape(outCell,nContrasts,2));
-%     end
-% end
-% 
-% % We have an annoying automatic reshape of single layers into columns.
-% % Fix this...
-% for i = 1:numel(outCell)
-%     if iscolumn(outCell{i})
-%         outCell{i} = transpose(outCell{i});
-%     end
-% end
-
 end
 
 % --------------------------------------------------------------

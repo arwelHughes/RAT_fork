@@ -1,0 +1,1 @@
+{"procedure":"de","parallel":"single","numSimulationPoints":500,"resampleMinAngle":0.9,"resampleNPoints":50,"display":"iter","populationSize":20,"fWeight":0.5,"crossoverProbability":0.8,"strategy":"vector dither","targetValue":1.0,"numGenerations":500,"updateFreq":1,"updatePlotFreq":20}

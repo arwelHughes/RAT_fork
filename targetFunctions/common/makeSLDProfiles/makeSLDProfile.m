@@ -33,7 +33,7 @@ if numberOfLayers>0
     layerRoughness = nextLayerRoughness;
     layerThickness = (x(end)-lastBoxEdge)*2;
     layerSLD = bulkOut;
-    nextLayerRoughness = ssub;
+    %nextLayerRoughness = ssub;
     thisBoxCentre = x(end);
     Lays(:,(numberOfLayers*nrepeats)+1) = asymconvstep(x,layerThickness,thisBoxCentre,layerRoughness,nextLayerRoughness,layerSLD);
     

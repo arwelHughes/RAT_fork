@@ -16,7 +16,7 @@ ratMainCodeGen;
 
 compilePath = fullfile(root,'compile','customWrapper');
 cd(compilePath);
-wrapperMexBuild;
+%wrapperMexBuild;
 
 % Return to RAT root directory
 cd(thisPath);

@@ -24,14 +24,14 @@ def matlab_rat(problem,controls,eng):
     problem.save('pyRAT_problem')
     
     # Save the controls..
-    controls.save(os.getcwd(),'pyRat_controls')
+    controls.save('pyRat_controls')
     
     
     # Get the current path...
     currPath = os.getcwd()
     
     # Manually get the matlab Rat dir for now....
-    ratPath = '/Users/arwel/Documents/coding/RAT_fork/'
+    ratPath = '/Users/arwel.hughes/Documents/coding/RAT_fork/'
     
     # Set the matlab path to the RAT directory...
     eng.cd(ratPath, nargout=0)

@@ -59,13 +59,6 @@ def customDSPC():
         path=os.getcwd(),
     )
     
-    problem.custom_files.append(
-        name="DSPC Model2",
-        filename="customBilayerDSPC.m",
-        language="matlab",
-        path=os.getcwd(),
-    )
-    
     # Also, add the relevant background parameters - one each for each contrast:
     problem.background_parameters.set_fields(
         0,

@@ -159,7 +159,7 @@
          testCase.verifySubstring(display, 'Plot events will be saved to');
          testCase.verifySize(eventManager.getEvents(), [1, 3]);
          events = eventManager.getEvents();
-         testCase.verifyEqual(events{1, 2}, eventTypes.Plot, 'savePlot did not register the correct event type');
+         testCase.verifyEqual(events{1, 2}, 1, 'savePlot did not register the correct event type');
          testCase.verifyEqual(events{1, 3}, s.handle, 'savePlot is not registered correctly');
 
          testData = struct('reflectivity', {{[0.1, 1; 0.2, 2]}}, 'shiftedData', {{[0.1, 1, 0.01]}}, 'sldProfiles', {{[0, 2]}}, 'resampledLayers', {{[]}}, 'dataPresent', [true], 'subRoughs', [0], 'resample', [false], 'contrastNames', {{'Test'}});
@@ -173,4 +173,15 @@
 
       function testStopEvent(testCase)
           controls = controlsClass();
+          testCase.assertEmpty(controls.getIPCFilePath(), 'IPC is not working');
+          controls.initialiseIPC();
+          path = controls.getIPCFilePath();
+          testCase.assertNotEmpty(path, 'IPC is not working');
+          testCase.assertFalse(isRATStopped(path), 'IPC is not working');
+          controls.sendStopEvent();
+          testCase.assertTrue(isRATStopped(path), 'IPC is not working');
+          testCase.assertFalse(isRATStopped(''), 'IPC is not working');
+      end
+   end
+end
 

@@ -6,12 +6,18 @@ if numberOfLayers>0
     % Find the maximum thickness, including any long roughness tail on final layer...
     totalThickness = sum(layers(:,1));
     outerLayerCentre = totalThickness - (layers(end,1)/2);
-    outerLayerTailLim = (erfcinv(0.01) * sqrt(2) * layers(end,3)) + outerLayerCentre;   % 99% confidence interval of outer error func..
-    outerLayerTailExtension = outerLayerTailLim - outerLayerCentre;
-    totalRange = ((totalThickness + outerLayerTailExtension)*nrepeats); % + 150;
-    totalRange = totalRange + (0.75 * totalRange);
-
     
+    % Find the point which covers 99% of the outer error function.. 
+    outerLayerTailLim = (erfcinv(0.01) * sqrt(2) * layers(end,3)) + outerLayerCentre;
+
+    % We need to make sure the total SLD renge includes this...
+    outerLayerTailExtension = outerLayerTailLim - outerLayerCentre;
+    totalRange = ((totalThickness + outerLayerTailExtension)*nrepeats);
+    
+    % Add some extra range at the end...
+    totalRange = totalRange + 100;
+
+    % Loop over the layers to make the full SLD profile...
     x = 0:totalRange;
     Lays = zeros(length(x),(numberOfLayers*nrepeats)+2);
     boxCen = 0;

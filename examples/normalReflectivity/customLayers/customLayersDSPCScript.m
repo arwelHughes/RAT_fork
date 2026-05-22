@@ -1,22 +1,12 @@
 %% Custom Layers Example for Supported DSPC layer.
 % Example of using Custom layers to model a DSPC supported bilayer.
 
-% Start by making the class and setting it to a custom layers type:
-problem = createProject(name='Orso lipid example - custom layers', model='custom layers');
+% Make ProjectClass...
+problem = createProject(name='Fit Example', model='custom layers');
 problem.geometry = 'Substrate/liquid';
 problem.showPriors = true;
 
-%% 
-% % First we need to set up a parameters group. We will be using a pre-prepared 
-% % custom model file, so it's useful to look at this to check which parameters 
-% % we are going to need:
-
-type customBilayerDSPC.m
-
-%% 
-% We need to add the relevant parameters we are going to need to define the 
-% model (note that Substrate Roughness' always exists as parameter 1..
-
+% Add some parameters....
 Parameters = {
     %       Name                min         val         max     fit? 
         {'Oxide thick',         5,          20,         60,     true   };
@@ -30,10 +20,6 @@ Parameters = {
     
  problem.addParameterGroup(Parameters);
  problem.setParameter(1,'min',1,'max',10);
- 
-%% 
-% Need to add the relevant Bulk SLD's. Change the bulk in from air to silicon, 
-% and add two additional water contrasts:
 
 % Change bulk in from air to silicon....
 problem.setBulkIn(1,'name','Silicon','min',2.07e-6,'value',2.073e-6,'max',2.08e-6,'fit',false);

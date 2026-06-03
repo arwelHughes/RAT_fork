@@ -1,16 +1,13 @@
-%% ERF Stack version
-clear
 
-z = 0:200;
-bulkIn = 2.073;
-bulkOut = 6.3;
-subRough = 7;
+function SLD = makeSLDProfileNew(bulkIn,bulkOut,layers,subRough,nRepeats)
 
-layers = [20,  3.4,  3;
-          20,  -0.5, 3;
-          20,   6,   3;
-          20,  -0.5, 3;
-          15,   4,   10];
+% Make a z range for the profile...
+z = 1:250;
+
+% Scale the SLDs...
+layers(:,2) = layers(:,2) * 1e6;
+bulkIn = bulkIn * 1e6;
+bulkOut = bulkOut * 1e6;
 
 % Arrange the roughnes' in the layers to reflect the 'next roughness'
 % loop...
@@ -27,10 +24,8 @@ alpha = zeros(1,nLayers);
 
 lastLayerSLD = bulkIn;
 thisPos = 50;
-%nextRough = subRough;
 
 for i = 1:nLayers
-    
     nextRough = layers(i,3);
     nextLayerSLD = layers(i,2);
     diff = nextLayerSLD - lastLayerSLD;
@@ -44,18 +39,12 @@ for i = 1:nLayers
     alpha(i) = abs(diff);
     thisPos = layers(i,1) + thisPos;
     lastLayerSLD = nextLayerSLD;
-
 end
 
 allFuncs = allFuncs .* alpha;
 total = sum(allFuncs,2); 
 total = (total + bulkIn) * 1e-6;
 
-figure(3); clf
-plot(z,total);
-hold on
+SLD = [z(:) total(:)];
 
-
-% Compare with the existing....
-oldSLD = makeSLDProfile(bulkIn,bulkOut,layers,subRough,1);
-plot(oldSLD(:,1),oldSLD(:,2)*1e-6);
+end

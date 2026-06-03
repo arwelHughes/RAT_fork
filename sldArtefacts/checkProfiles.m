@@ -5,7 +5,7 @@ clear
 z = 0:200;
 bulkIn = 2.073e-6;
 bulkOut = 6.3e-6;
-subRough = 3;
+subRough = 8;
 
 layers = [20,  3.4,  3;
           20,  -0.5, 3;

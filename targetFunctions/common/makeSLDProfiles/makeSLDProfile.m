@@ -1,7 +1,12 @@
 function SLD = makeSLDProfile(bulkIn,bulkOut,layers,lastRough,nRepeats)
 
+% Scale the SLDs...
+layers(:,2) = layers(:,2) * 1e6;
 bulkIn = bulkIn * 1e6;
 bulkOut = bulkOut * 1e6;
+
+% Define cdf...
+cdf = @(x,mu,r) 0.5*(erf((x-mu)/(sqrt(2)*r)) + 1);
 
 if size(layers,1) > 0
     % Make a z range for the profile...
@@ -20,9 +25,6 @@ if size(layers,1) > 0
     totalRange = totalRange + 100;
     z = 0:totalRange;
 
-    % Scale the SLDs...
-    layers(:,2) = layers(:,2) * 1e6;
-
     % Repeat the stack according to 'nRepeats'...
     layers = repmat(layers,nRepeats,1);
 
@@ -34,18 +36,17 @@ if size(layers,1) > 0
     nLayers = size(layers,1);
     allFuncs = zeros(length(z),nLayers);
     alpha = zeros(1,nLayers);
-
     lastLayerSLD = bulkIn;
     thisPos = 50;
 
     % Make the profile by adding an error function for each interface (we
-    % use 'normcdf' because it scales more easily than 'erf'...)
+    % use 'cdf' because it scales more easily than 'erf'...)
     for i = 1:nLayers
         nextRough = layers(i,3);
         nextLayerSLD = layers(i,2);
         diff = nextLayerSLD - lastLayerSLD;
 
-        thisFun = normcdf(z,thisPos,nextRough);
+        thisFun = cdf(z,thisPos,nextRough);
         if diff < 0
             thisFun = -thisFun;
         end
@@ -63,14 +64,17 @@ else
     z = 0:100;
     pos = 50;
     diff = bulkOut - bulkIn;
-    thisFun = normcdf(z,pos,lastRough);
+    thisFun = cdf(z,pos,lastRough);
     if diff < 1
         thisFun = -thisFun;
     end
     total = thisFun * abs(diff);
 end
 
+% Scale the SLD's back to Angstroms...
 total = (total + bulkIn) * 1e-6;
+
+% Package for output..
 SLD = [z(:) total(:)];
 
 end

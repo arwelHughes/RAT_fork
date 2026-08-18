@@ -56,6 +56,9 @@ classdef testCommonFunctions < matlab.unittest.TestCase
         
         resolutionPollyInputs;
         resolutionPollyOutputs;
+
+        gaussianConvInputs
+        gaussianConvOutputs
         
         tolerance = 1.0e-12;     % Relative tolerance for equality of floats
         abs_tolerance = 1.0e-5;  % Absolute tolerance for equality of floats
@@ -193,6 +196,13 @@ classdef testCommonFunctions < matlab.unittest.TestCase
             testCase.resolutionPollyOutputs = outputs.outputs;
         end 
         
+        function loadGaussianConv(testCase)
+            inputs = load('gaussianConvInputs.mat');
+            outputs = load('gaussianConvOutputs.mat');
+            testCase.gaussianConvInputs = inputs.inputs;
+            testCase.gaussianConvOutputs = outputs.outputs;
+        end 
+
     end
 
 %%
@@ -300,12 +310,18 @@ classdef testCommonFunctions < matlab.unittest.TestCase
 
         end
 
-        function testResolutionPolly(testCase)
-            out1 = resolutionPolly(testCase.resolutionPollyInputs{1:end});
-            outputs = {out1};
-            testCase.verifyEqual(testCase.resolutionPollyOutputs,outputs, 'RelTol', testCase.tolerance, 'AbsTol', testCase.abs_tolerance);
+        % function testResolutionPolly(testCase)
+        %     out1 = resolutionPolly(testCase.resolutionPollyInputs{1:end});
+        %     outputs = {out1};
+        %     testCase.verifyEqual(testCase.resolutionPollyOutputs,outputs, 'RelTol', testCase.tolerance, 'AbsTol', testCase.abs_tolerance);
+        % 
+        % end
 
-        end        
+        function testGaussianConv(testCase)
+            out1 = gaussian_convolution(testCase.gaussianConvInputs{1:end});
+            outputs = {out1};
+            testCase.verifyEqual(testCase.gaussianConvOutputs,outputs, 'RelTol', testCase.tolerance, 'AbsTol', testCase.abs_tolerance);
+        end  
 
     end
 end

@@ -45,18 +45,6 @@ classdef testCommonFunctions < matlab.unittest.TestCase
         SLDFunctionInputs;
         SLDFunctionOutputs;
 
-        dataResolutionPollyParallelPointsInputs;
-        dataResolutionPollyParallelPointsOutputs;
-        
-        dataResolutionPollyInputs;
-        dataResolutionPollyOutputs;
-        
-        resolutionPollyParallelPointsInputs;
-        resolutionPollyParallelPointsOutputs;
-        
-        resolutionPollyInputs;
-        resolutionPollyOutputs;
-
         gaussianConvInputs
         gaussianConvOutputs
         
@@ -310,15 +298,8 @@ classdef testCommonFunctions < matlab.unittest.TestCase
 
         end
 
-        % function testResolutionPolly(testCase)
-        %     out1 = resolutionPolly(testCase.resolutionPollyInputs{1:end});
-        %     outputs = {out1};
-        %     testCase.verifyEqual(testCase.resolutionPollyOutputs,outputs, 'RelTol', testCase.tolerance, 'AbsTol', testCase.abs_tolerance);
-        % 
-        % end
-
         function testGaussianConv(testCase)
-            out1 = gaussian_convolution(testCase.gaussianConvInputs{1:end});
+            out1 = gaussianConvolution(testCase.gaussianConvInputs{1:end});
             outputs = {out1};
             testCase.verifyEqual(testCase.gaussianConvOutputs,outputs, 'RelTol', testCase.tolerance, 'AbsTol', testCase.abs_tolerance);
         end  

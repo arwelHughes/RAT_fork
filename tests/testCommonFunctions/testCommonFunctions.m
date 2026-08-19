@@ -176,13 +176,6 @@ classdef testCommonFunctions < matlab.unittest.TestCase
             testCase.SLDFunctionInputs = inputs.inputs;
             testCase.SLDFunctionOutputs = outputs.outputs;
         end
-
-        function loadResolutionPolly(testCase)
-            inputs = load('resolutionPollyInputs.mat');
-            outputs = load('resolutionPollyOutputs.mat');
-            testCase.resolutionPollyInputs = inputs.inputs;
-            testCase.resolutionPollyOutputs = outputs.outputs;
-        end 
         
         function loadGaussianConv(testCase)
             inputs = load('gaussianConvInputs.mat');
